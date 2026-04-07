@@ -49,7 +49,21 @@ export default async function handler(req) {
   );
 
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '응답을 받지 못하였소, 동무.';
+
+  if (!res.ok || data.error) {
+    return new Response(JSON.stringify({ error: data.error?.message || 'Gemini API error' }), {
+      status: 502,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    return new Response(JSON.stringify({ error: 'empty response' }), {
+      status: 502,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 
   return new Response(JSON.stringify({ text }), {
     headers: {
