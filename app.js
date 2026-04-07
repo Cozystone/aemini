@@ -8,6 +8,8 @@
 const LS_CHATS    = 'aemini_chats';
 const LS_PROFILE  = 'aemini_profile';
 const LS_SETTINGS = 'aemini_settings';
+const LS_TOKEN    = 'aemini_token';
+const LS_USERNAME = 'aemini_username';
 
 const MODELS = [
   { id: 'hydrogen', name: '에미나이 수소폭탄급', desc: '최강 핵두뇌 — 주체사상 완전체' },
@@ -18,7 +20,9 @@ const MODELS = [
 
 let currentModel = MODELS[1];
 
-const EXAMPLE_CHATS = [
+// EXAMPLE_CHATS 제거됨
+
+const _REMOVED_EXAMPLE_CHATS = [
   {
     id: 'ex_01',
     title: '미제 타도 전략 회의',
@@ -221,6 +225,19 @@ const LOADING_MSGS = [
 let welcomeVisible = true;
 let currentChatId = null;
 let currentMessages = [];
+let _saveTimer = null;
+
+// ============================================================
+// 인증
+// ============================================================
+function getToken() { return localStorage.getItem(LS_TOKEN); }
+function getUsername() { return localStorage.getItem(LS_USERNAME) || '동무'; }
+function logout() {
+  localStorage.removeItem(LS_TOKEN);
+  localStorage.removeItem(LS_USERNAME);
+  localStorage.removeItem(LS_CHATS);
+  window.location.href = '/login.html';
+}
 
 // ============================================================
 // localStorage 유틸
@@ -230,6 +247,34 @@ function getChats() {
 }
 function saveChats(chats) {
   localStorage.setItem(LS_CHATS, JSON.stringify(chats));
+  // 서버 저장 디바운스 (1초 후)
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => syncChatsToServer(chats), 1000);
+}
+async function syncChatsToServer(chats) {
+  const token = getToken();
+  if (!token) return;
+  try {
+    await fetch('/api/user-chats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ chats })
+    });
+  } catch {}
+}
+async function loadChatsFromServer() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    const res = await fetch('/api/user-chats', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    if (Array.isArray(data.chats)) {
+      localStorage.setItem(LS_CHATS, JSON.stringify(data.chats));
+    }
+  } catch {}
 }
 function getProfile() {
   return Object.assign({ name: '동무 김철수', rank: '인민반 회원', initial: '동' },
@@ -268,8 +313,6 @@ function renderChatHistory() {
   const chats = getChats();
 
   ul.innerHTML = '';
-
-  // 유저 대화
   chats.forEach(chat => {
     const li = document.createElement('li');
     li.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
@@ -278,22 +321,6 @@ function renderChatHistory() {
     li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${escapeHtml(chat.title)}</span>
       <button class="chat-item-del" title="삭제" onclick="deleteChatById(event,'${chat.id}')">×</button>`;
     li.addEventListener('click', (e) => { if (!e.target.classList.contains('chat-item-del')) loadChat(chat.id); });
-    ul.appendChild(li);
-  });
-
-  // 예시 대화 (구분선 후 하단에)
-  if (chats.length > 0) {
-    const divider = document.createElement('li');
-    divider.className = 'chat-history-divider';
-    divider.textContent = '예시 대화';
-    ul.appendChild(divider);
-  }
-  EXAMPLE_CHATS.forEach(ec => {
-    const li = document.createElement('li');
-    li.className = 'chat-item example-item' + (currentChatId === null && document.querySelector(`#chatHistory .example-item.active`)?.dataset.id === ec.id ? ' active' : '');
-    li.dataset.id = ec.id;
-    li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${ec.title}</span>`;
-    li.addEventListener('click', () => loadExampleChat(ec.id));
     ul.appendChild(li);
   });
 }
@@ -313,23 +340,6 @@ function loadChat(id) {
   if (window.innerWidth <= 700) closeSidebar();
 }
 
-function loadExampleChat(id) {
-  const ec = EXAMPLE_CHATS.find(e => e.id === id);
-  if (!ec) return;
-  currentChatId = null;
-  currentMessages = [];
-  hideWelcome();
-  const messages = document.getElementById('messages');
-  messages.innerHTML = '';
-  ec.messages.forEach(m => renderMessage(m.role, m.text));
-  scrollToBottom();
-  // highlight
-  document.querySelectorAll('#exampleList .chat-item').forEach(li => {
-    li.classList.toggle('active', li.dataset.id === id);
-  });
-  document.querySelectorAll('#chatHistory .chat-item').forEach(li => li.classList.remove('active'));
-  if (window.innerWidth <= 700) closeSidebar();
-}
 
 function deleteChatById(e, id) {
   e.stopPropagation();
@@ -342,7 +352,13 @@ function deleteChatById(e, id) {
 // ============================================================
 // 초기화
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  // 인증 체크
+  if (!getToken()) {
+    window.location.href = '/login.html';
+    return;
+  }
+
   // 선전 마퀴
   const banner = document.createElement('div');
   banner.className = 'manifesto';
@@ -358,6 +374,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const bannerH = banner.offsetHeight || 30;
   document.getElementById('sidebar').style.marginTop = bannerH + 'px';
   document.getElementById('mainArea').style.marginTop = bannerH + 'px';
+
+  // 서버에서 채팅 로드
+  await loadChatsFromServer();
 
   renderChatHistory();
   applyAllSettings();
@@ -473,13 +492,13 @@ function clearAllChats() {
 // 프로필
 // ============================================================
 function updateProfileUI() {
-  const p = getProfile();
+  const username = getUsername();
   const nameEl = document.querySelector('.user-name');
   const planEl = document.querySelector('.user-plan');
   const avatarEl = document.querySelector('.avatar');
-  if (nameEl) nameEl.textContent = p.name;
-  if (planEl) planEl.textContent = p.rank;
-  if (avatarEl) avatarEl.textContent = p.initial || p.name[0] || '동';
+  if (nameEl) nameEl.textContent = username;
+  if (planEl) planEl.textContent = '인민반 회원';
+  if (avatarEl) avatarEl.textContent = username[0] || '동';
 }
 
 function openProfile() {

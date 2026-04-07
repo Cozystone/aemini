@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>에미나이 — 인민 등록</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&display=swap');
+    @font-face { font-family:'WK붓글'; src:url('fonts/nkfonts/WKBusgul.ttf') format('truetype'); }
+    @font-face { font-family:'WK궁체'; src:url('fonts/nkfonts/WKGungche.ttf') format('truetype'); }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0D0005;
+      color: #F0E8D8;
+      font-family: 'WK궁체','Noto Serif KR','궁서체',serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-banner {
+      background: #00398E;
+      color: #fff;
+      text-align: center;
+      padding: 6px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      border-bottom: 3px solid #00225A;
+    }
+
+    .flag-stripe { display:flex; height:8px; }
+    .flag-stripe span:nth-child(1) { background:#00398E; flex:1; }
+    .flag-stripe span:nth-child(2) { background:#fff; flex:0 0 2px; }
+    .flag-stripe span:nth-child(3) { background:#C8102E; flex:3; }
+    .flag-stripe span:nth-child(4) { background:#fff; flex:0 0 2px; }
+    .flag-stripe span:nth-child(5) { background:#00398E; flex:1; }
+
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      border: 2px solid #00398E;
+      border-top: 6px solid #00398E;
+      background: #060010;
+      box-shadow: 6px 6px 0 #00225A;
+    }
+
+    .card-header {
+      background: #00398E;
+      padding: 20px 24px 16px;
+      text-align: center;
+      border-bottom: 3px solid #00225A;
+    }
+    .card-logo {
+      font-family: 'WK붓글','WK궁체','궁서체',serif;
+      font-size: 32px;
+      color: #fff;
+      letter-spacing: 6px;
+      text-shadow: 2px 2px 0 #00225A;
+    }
+    .card-logo span { font-size: 24px; margin-right: 8px; }
+    .card-subtitle { font-size: 11px; color: rgba(255,255,255,0.8); letter-spacing: 3px; margin-top: 4px; }
+
+    .flag-stripe-sm { display:flex; height:5px; }
+    .flag-stripe-sm span:nth-child(1) { background:#00398E; flex:1; }
+    .flag-stripe-sm span:nth-child(2) { background:#fff; flex:0 0 2px; }
+    .flag-stripe-sm span:nth-child(3) { background:#C8102E; flex:3; }
+    .flag-stripe-sm span:nth-child(4) { background:#fff; flex:0 0 2px; }
+    .flag-stripe-sm span:nth-child(5) { background:#00398E; flex:1; }
+
+    .card-body { padding: 28px 24px; }
+
+    .notice {
+      background: rgba(0,57,142,0.15);
+      border: 1px solid rgba(0,57,142,0.5);
+      border-left: 4px solid #00398E;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #90B8E8;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .notice strong { color: #60A0FF; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label { display:block; font-size:11px; color:#80A0C8; letter-spacing:2px; margin-bottom:6px; }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: #03000A;
+      border: 2px solid #102040;
+      color: #F0E8D8;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input:focus { border-color: #00398E; }
+    .form-input::placeholder { color: #203050; }
+
+    .hint { font-size: 10px; color: #405070; margin-top: 4px; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: #00398E;
+      border: none;
+      border-bottom: 4px solid #00225A;
+      color: #fff;
+      font-family: 'WK붓글','WK궁체','궁서체',serif;
+      font-size: 16px;
+      letter-spacing: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background .15s;
+    }
+    .submit-btn:hover { background: #1A5BB5; }
+    .submit-btn:active { border-bottom-width: 1px; transform: translateY(3px); }
+
+    .error-msg {
+      background: rgba(200,16,46,0.2);
+      border: 1px solid #C8102E;
+      color: #FF8888;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .card-footer {
+      border-top: 1px solid #101030;
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #405070;
+    }
+    .card-footer a { color: #4080C8; text-decoration: none; font-weight: bold; }
+    .card-footer a:hover { text-decoration: underline; }
+
+    .stamp { text-align:center; padding:16px; font-size:10px; color:#1A0830; letter-spacing:1px; }
+  </style>
+</head>
+<body>
+
+<div class="top-banner">☆ 조선민주주의인민공화국 에미나이 인민 등록 시스템 ☆</div>
+<div class="flag-stripe"><span></span><span></span><span></span><span></span><span></span></div>
+
+<div class="page">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-logo"><span>★</span>에미나이</div>
+      <div class="card-subtitle">인민 등록 / 동무 신규 가입</div>
+    </div>
+    <div class="flag-stripe-sm"><span></span><span></span><span></span><span></span><span></span></div>
+
+    <div class="card-body">
+      <div class="notice">
+        <strong>【안내】</strong> 등록 후 모든 대화는 동무의 계정에 안전하게 보관되오.<br>
+        단, 반혁명적 발언은 별도 관리되오.
+      </div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label class="form-label">동무 아이디</label>
+          <input type="text" id="username" class="form-input" placeholder="2~20자로 입력하시오" autocomplete="username" required/>
+          <div class="hint">영문, 숫자, 한글 사용 가능</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">비밀 암호</label>
+          <input type="password" id="password" class="form-input" placeholder="4자 이상 입력하시오" autocomplete="new-password" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">비밀 암호 확인</label>
+          <input type="password" id="passwordConfirm" class="form-input" placeholder="다시 한번 입력하시오" autocomplete="new-password" required/>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">인민 등록</button>
+        <div class="error-msg" id="errorMsg"></div>
+      </form>
+    </div>
+
+    <div class="card-footer">
+      이미 등록된 동무이오? <a href="login.html">신원 확인</a>
+    </div>
+  </div>
+</div>
+
+<div class="stamp">국가보위성 승인필 · 에미나이 인민 등록 시스템 v1.0</div>
+
+<script>
+  if (localStorage.getItem('aemini_token')) {
+    window.location.href = '/';
+  }
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const errEl = document.getElementById('errorMsg');
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('passwordConfirm').value;
+
+    errEl.style.display = 'none';
+
+    if (password !== confirm) {
+      errEl.textContent = '비밀번호가 일치하지 않소, 동무';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    btn.textContent = '등록 중...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      localStorage.setItem('aemini_token', data.token);
+      localStorage.setItem('aemini_username', data.username);
+      window.location.href = '/';
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.style.display = 'block';
+      btn.textContent = '인민 등록';
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
