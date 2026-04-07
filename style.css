@@ -1,64 +1,51 @@
 /* ============================================================
-   에미나이 - 조선인민공화국 인공지능 UI
-   실제 북한 사이트 감성: 밝은 배경 + 국기색(적·청) + 궁서체
+   에미나이 - 조선민주주의인민공화국 인공지능
+   실제 NK 사이트 감성: 포털형 · 국기색 · 직각 박스
    ============================================================ */
 
+/* ── WK 북한 폰트 ── */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap');
+@font-face { font-family: 'WK궁체';   src: url('fonts/nkfonts/WKGungche.ttf')      format('truetype'); }
+@font-face { font-family: 'WK붓글';   src: url('fonts/nkfonts/WKBusgul.ttf')       format('truetype'); }
+@font-face { font-family: 'WK예붓글'; src: url('fonts/nkfonts/WKYeBusgul.ttf')     format('truetype'); }
+@font-face { font-family: 'WKW예서';  src: url('fonts/nkfonts/WKWYeseo.ttf')       format('truetype'); }
+@font-face { font-family: 'WK문화';   src: url('fonts/nkfonts/WKMunhwa.ttf')       format('truetype'); }
+@font-face { font-family: 'WK고직';   src: url('fonts/nkfonts/WKGojik.ttf')        format('truetype'); }
+@font-face { font-family: 'WKW고직';  src: url('fonts/nkfonts/WKWGojik.ttf')       format('truetype'); }
+@font-face { font-family: 'WK새날';   src: url('fonts/nkfonts/WKSaenal.ttf')       format('truetype'); }
+@font-face { font-family: 'WKW광명';  src: url('fonts/nkfonts/WKWGwangmyeong.ttf') format('truetype'); }
 
-/* ── 북한 WK 폰트 (fonts/ 폴더에 파일 배치 필요) ── */
-@font-face { font-family: 'WK궁체';   src: url('fonts/nkfonts/WKGungche.ttf')      format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WK붓글';   src: url('fonts/nkfonts/WKBusgul.ttf')       format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WK예붓글'; src: url('fonts/nkfonts/WKYeBusgul.ttf')     format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WKW예서';  src: url('fonts/nkfonts/WKWYeseo.ttf')       format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WK문화';   src: url('fonts/nkfonts/WKMunhwa.ttf')       format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WK고직';   src: url('fonts/nkfonts/WKGojik.ttf')        format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WKW고직';  src: url('fonts/nkfonts/WKWGojik.ttf')       format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WK새날';   src: url('fonts/nkfonts/WKSaenal.ttf')       format('truetype'); font-weight: normal; }
-@font-face { font-family: 'WKW광명';  src: url('fonts/nkfonts/WKWGwangmyeong.ttf') format('truetype'); font-weight: normal; }
-
+/* ── 변수 ── */
 :root {
-  /* 북한 국기 색상 */
-  --red:        #CD2E3A;   /* 국기 빨강 */
-  --red-dark:   #9A1020;
-  --red-light:  #E8384A;
-  --blue:       #024FA2;   /* 국기 파랑 */
-  --blue-light: #1A6BC8;
-  --blue-dim:   #D8E8F8;
-  --gold:       #C9A227;
-
-  /* 배경 — 찐한 황토색 계열 */
-  --bg:         #C8A97A;   /* 혁명 포스터 황토색 */
-  --bg-sidebar: #1A0C0C;   /* 사이드바 적흑 */
-  --bg-card:    #E8D4B0;   /* 카드는 조금 밝게 */
-  --bg-input:   #DCC898;
-  --bg-hover:   #B89A68;
-
-  /* 선/테두리 */
-  --line:       #A07840;
-  --line-bold:  #7A5420;
-  --line-red:   var(--red);
-
-  /* 텍스트 */
-  --text:       #1A0800;
-  --text-dim:   #5A3810;
-  --text-mid:   #3A2008;
-  --text-on-dark: #F0DEDE;  /* 어두운 배경 위 텍스트 */
-  --text-dim-dark: #8A6A6A;
-
-  --sidebar-w:  260px;
+  --red:       #C8102E;   /* 국기 빨강 */
+  --red-dk:    #8E0018;
+  --red-lt:    #E52035;
+  --blue:      #00398E;   /* 국기 파랑 */
+  --blue-lt:   #1A5BB5;
+  --blue-dk:   #00225A;
+  --gold:      #C8960C;
+  --white:     #FFFFFF;
+  --paper:     #F5F0E8;   /* 약간 따뜻한 흰색 */
+  --ink:       #0D0D0D;
+  --ink-mid:   #333333;
+  --ink-dim:   #777777;
+  --sidebar-bg:#14080A;
+  --sidebar-w: 256px;
+  --line-red:  2px solid var(--red);
+  --line-blue: 2px solid var(--blue);
+  --line-gray: 1px solid #C8B8B0;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 
 body {
-  /* WK궁체 우선, 없으면 Noto Serif KR → 궁서체 순 fallback */
-  font-family: 'WK궁체', 'Noto Serif KR', '궁서체', '궁서', Georgia, serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: 'WK궁체', 'Noto Serif KR', '궁서체', Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
   display: flex;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 /* ── 오버레이 ── */
@@ -66,211 +53,148 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.55);
   z-index: 9;
 }
 .sidebar-overlay.visible { display: block; }
 
 /* ============================================================
-   사이드바 — 어두운 적흑 (Gemini 좌측 패널처럼)
+   사이드바 — 적흑 배경, NK 포털 좌측 패널
    ============================================================ */
 .sidebar {
   width: var(--sidebar-w);
-  background: var(--bg-sidebar);
-  border-right: 3px solid var(--red-dark);
+  background: var(--sidebar-bg);
+  border-right: 3px solid var(--red);
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0; left: 0; bottom: 0;
   z-index: 20;
   transform: translateX(0);
-  transition: transform 0.24s cubic-bezier(.4,0,.2,1);
+  transition: transform 0.22s ease;
 }
 .sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); }
 
-/* 사이드바 헤더 — 국기 빨강 */
+/* 사이드바 헤더 */
 .sidebar-top {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 12px;
+  padding: 11px 12px;
   background: var(--red);
-  border-bottom: 3px solid var(--red-dark);
+  border-bottom: 3px solid var(--red-dk);
   flex-shrink: 0;
 }
-
 .new-chat-btn {
   background: none;
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.5);
   color: #fff;
   cursor: pointer;
   padding: 5px 7px;
-  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .15s, border-color .15s;
+  transition: background .12s;
   margin-left: auto;
 }
-.new-chat-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+.new-chat-btn:hover { background: rgba(255,255,255,0.18); }
 
 .logo-area { display: flex; align-items: center; gap: 8px; }
-.logo-icon  { width: 24px; height: 24px; filter: brightness(0) invert(1); }
+.logo-icon  { width: 22px; height: 22px; filter: brightness(0) invert(1); }
 .logo-text  {
-  font-size: 18px;
-  font-weight: 900;
+  font-family: 'WK붓글', 'WK예붓글', '궁서체', serif;
+  font-size: 20px;
   color: #fff;
   letter-spacing: 3px;
-  text-shadow: 1px 1px 0 var(--red-dark);
-  /* 로고: 붓글 느낌 */
-  font-family: 'WK붓글', 'WK궁체', 'Noto Serif KR', '궁서', serif;
+  text-shadow: 1px 2px 0 var(--red-dk);
 }
 
-/* 검색창 */
-.sidebar-search { padding: 10px 10px 4px; flex-shrink: 0; }
+/* 검색 */
+.sidebar-search { padding: 8px 8px 2px; flex-shrink: 0; }
 .search-box {
   display: flex;
   align-items: center;
-  gap: 7px;
-  background: rgba(255,255,255,0.07);
+  gap: 6px;
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 7px;
-  padding: 7px 10px;
-  transition: border-color .15s, background .15s;
+  padding: 6px 9px;
+  transition: border-color .12s;
 }
-.search-box:focus-within {
-  border-color: var(--red);
-  background: rgba(255,255,255,0.1);
-}
-.search-box svg { color: var(--text-dim-dark); flex-shrink: 0; }
+.search-box:focus-within { border-color: var(--red); }
+.search-box svg { color: #886060; flex-shrink: 0; }
 .search-box input {
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text-on-dark);
-  font-family: inherit;
-  font-size: 13px;
-  width: 100%;
+  background: none; border: none; outline: none;
+  color: #EED8D8; font-family: inherit; font-size: 12px; width: 100%;
 }
-.search-box input::placeholder { color: var(--text-dim-dark); }
+.search-box input::placeholder { color: #664444; }
 
-/* 섹션 레이블 */
+/* 섹션 레이블 — NK식 붉은 제목바 */
 .sidebar-section-label {
   font-size: 10px;
   font-weight: 700;
-  color: var(--red-light);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 14px 14px 5px;
+  letter-spacing: 2px;
+  color: #fff;
+  background: var(--red-dk);
+  padding: 5px 12px;
+  border-top: 1px solid var(--red);
+  border-bottom: 1px solid var(--red);
+  margin-top: 6px;
   flex-shrink: 0;
 }
 
 /* 채팅 히스토리 */
-.chat-history {
-  list-style: none;
-  padding: 0 6px;
-  flex: 1;
-  overflow-y: auto;
-}
-
+.chat-history { list-style: none; padding: 4px 0; flex: 1; overflow-y: auto; }
 .chat-item {
   display: flex;
   align-items: center;
-  padding: 8px 10px;
-  border-radius: 7px;
+  padding: 8px 12px;
   cursor: pointer;
-  font-size: 13px;
-  color: var(--text-dim-dark);
+  font-size: 12px;
+  color: #997777;
   gap: 6px;
-  margin-bottom: 2px;
-  transition: background .12s, color .12s;
+  border-bottom: 1px solid rgba(80,20,20,0.4);
+  transition: background .1s, color .1s;
 }
-.chat-item-text {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.chat-item-text { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .chat-item-del {
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  color: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  padding: 0 2px;
-  border-radius: 4px;
-  transition: color .1s;
+  flex-shrink: 0; background: none; border: none;
+  color: transparent; cursor: pointer; font-size: 16px;
+  line-height: 1; transition: color .1s;
 }
-.chat-item:hover .chat-item-del { color: var(--text-dim-dark); }
-.chat-item-del:hover { color: var(--red-light) !important; }
-.chat-item:hover { background: rgba(255,255,255,0.07); color: var(--text-on-dark); }
+.chat-item:hover .chat-item-del { color: #664444; }
+.chat-item-del:hover { color: var(--red-lt) !important; }
+.chat-item:hover { background: rgba(180,30,30,0.18); color: #EED8D8; }
 .chat-item.active {
-  background: var(--red-dark);
+  background: var(--red-dk);
   color: #fff;
-  border-left: 3px solid var(--red-light);
-  padding-left: 7px;
+  border-left: 3px solid var(--red-lt);
+  padding-left: 9px;
 }
 .chat-item.hidden { display: none; }
-
-.no-results {
-  text-align: center;
-  color: var(--text-dim-dark);
-  font-size: 12px;
-  padding: 18px 0;
-  display: none;
-  list-style: none;
-}
+.no-results { text-align:center; color:#664444; font-size:12px; padding:16px 0; display:none; list-style:none; }
 
 /* 사이드바 하단 */
-.sidebar-bottom {
-  padding: 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  flex-shrink: 0;
-}
+.sidebar-bottom { padding: 10px; border-top: 2px solid var(--red-dk); flex-shrink: 0; }
 .user-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 9px;
-  cursor: pointer;
-  transition: background .12s;
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px; cursor: pointer; transition: background .1s;
 }
-.user-profile:hover { background: rgba(255,255,255,0.07); }
-
+.user-profile:hover { background: rgba(255,255,255,0.06); }
 .avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--red-dark);
+  width: 32px; height: 32px;
+  background: var(--red-dk);
   border: 2px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 900;
-  color: #fff;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff; flex-shrink: 0;
 }
-.user-info { flex: 1; min-width: 0; }
-.user-name { font-size: 13px; font-weight: 700; color: var(--text-on-dark); }
-.user-plan  { font-size: 11px; color: var(--gold); }
-.settings-btn {
-  background: none;
-  border: none;
-  color: var(--text-dim-dark);
-  cursor: pointer;
-  font-size: 15px;
-  border-radius: 6px;
-  transition: color .12s;
-}
-.settings-btn:hover { color: var(--text-on-dark); }
+.user-info { flex:1; min-width:0; }
+.user-name { font-size: 12px; font-weight: 700; color: #EED8D8; }
+.user-plan  { font-size: 10px; color: var(--gold); }
+.settings-btn { background:none; border:none; color:#664444; cursor:pointer; font-size:14px; transition:color .1s; }
+.settings-btn:hover { color: #EED8D8; }
 
 /* ============================================================
-   메인 — 밝은 아이보리 배경
+   메인
    ============================================================ */
 .main {
   flex: 1;
@@ -280,83 +204,79 @@ body {
   position: relative;
   z-index: 1;
   margin-left: var(--sidebar-w);
-  transition: margin-left 0.24s cubic-bezier(.4,0,.2,1);
-  background: var(--bg);
+  transition: margin-left 0.22s ease;
+  background: var(--paper);
 }
 .main.expanded { margin-left: 0; }
 
-/* 상단 바 — 빨강 + 파랑 스트라이프 (국기 느낌) */
+/* ── 마스트헤드 — 빨강 헤더 ── */
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 4px solid var(--blue);
+  padding: 0 14px;
   background: var(--red);
+  border-bottom: 4px solid var(--blue);  /* 국기: 빨강 아래 파랑 줄 */
   flex-shrink: 0;
   gap: 8px;
-  height: 50px;
+  height: 48px;
 }
 .top-bar-left { display: flex; align-items: center; }
 
-/* 햄버거 */
 .menu-btn {
   background: none;
-  border: 1px solid rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.4);
   cursor: pointer;
   padding: 6px 7px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: background .15s, border-color .15s;
+  display: flex; flex-direction: column; gap: 4px;
+  transition: background .12s;
 }
-.menu-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.7); }
-
+.menu-btn:hover { background: rgba(255,255,255,0.15); }
 .hamburger-line {
-  display: block;
-  width: 17px;
-  height: 2px;
+  display: block; width: 17px; height: 2px;
   background: #fff;
-  border-radius: 1px;
   transform-origin: center;
-  transition: transform .22s, opacity .22s;
+  transition: transform .2s, opacity .2s;
 }
 .menu-btn.open .hamburger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.menu-btn.open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.menu-btn.open .hamburger-line:nth-child(2) { opacity:0; transform:scaleX(0); }
 .menu-btn.open .hamburger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 .model-select {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: var(--red-dark);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 20px;
-  font-size: 13px;
-  color: #fff;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background .15s;
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 11px;
+  background: var(--red-dk);
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 12px; color: #fff;
+  cursor: pointer; font-family: inherit;
+  transition: background .12s;
+  letter-spacing: 0.3px;
 }
 .model-select:hover { background: rgba(0,0,0,0.3); }
 
-.top-actions { display: flex; gap: 4px; }
+.top-actions { display: flex; gap: 3px; }
 .icon-btn {
-  background: none;
-  border: 1px solid transparent;
-  color: rgba(255,255,255,0.75);
-  cursor: pointer;
-  padding: 7px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  transition: background .12s, color .12s;
+  background: none; border: 1px solid transparent;
+  color: rgba(255,255,255,0.75); cursor: pointer;
+  padding: 6px 7px; display: flex; align-items: center; justify-content: center;
+  font-size: 15px; transition: background .1s, color .1s;
 }
 .icon-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ── 파랑 서브 네비 바 (NK 포털 특징) ── */
+.main::before {
+  content: '★ 조선민주주의인민공화국 인민을 위한 초월적 인공지능 ★';
+  display: block;
+  background: var(--blue);
+  color: #A8C8FF;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--blue-dk);
+  flex-shrink: 0;
+}
 
 /* ============================================================
    대화 영역
@@ -364,118 +284,108 @@ body {
 .chat-area {
   flex: 1;
   overflow-y: auto;
-  padding: 28px 24px;
+  padding: 20px 20px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--bg);
+  background: var(--paper);
 }
 
-/* 웰컴 */
+/* ── 웰컴 화면 ── */
 .welcome-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 680px;
+  max-width: 700px;
   width: 100%;
   margin: auto;
-  animation: fadeIn .4s ease;
+  animation: fadeIn .35s ease;
 }
 
-.welcome-logo { margin-bottom: 16px; }
-
+/* 별 로고 */
+.welcome-logo { margin-bottom: 12px; }
 .gem-icon {
-  font-size: 70px;
+  font-size: 64px;
   line-height: 1;
   color: var(--red);
-  text-shadow:
-    2px 2px 0 var(--red-dark),
-    0 0 20px rgba(205,46,58,0.3);
+  text-shadow: 2px 3px 0 var(--red-dk);
   animation: stampPulse 3s ease-in-out infinite;
 }
 @keyframes stampPulse {
-  0%,100% { text-shadow: 2px 2px 0 var(--red-dark), 0 0 15px rgba(205,46,58,0.2); }
-  50%      { text-shadow: 2px 2px 0 var(--red-dark), 0 0 30px rgba(205,46,58,0.5); }
+  0%,100% { text-shadow: 2px 3px 0 var(--red-dk); }
+  50%      { text-shadow: 2px 3px 0 var(--red-dk), 0 0 20px rgba(200,16,46,0.4); }
 }
 
+/* 제호 박스 — NK 신문 마스트헤드 */
 .welcome-title {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: 3px;
-  margin-bottom: 6px;
-  /* 제목: 예서/붓글 느낌 */
-  font-family: 'WK예붓글', 'WKW예서', 'WK궁체', 'Noto Serif KR', '궁서', serif;
+  font-family: 'WK예붓글', 'WKW예서', '궁서체', serif;
+  font-size: 30px;
+  color: var(--red);
+  letter-spacing: 4px;
+  width: 100%;
+  padding: 10px 0;
+  border-top: 3px double var(--red);
+  border-bottom: 3px double var(--red);
+  margin-bottom: 0;
+  background: var(--white);
 }
 
-/* 제목 아래 국기색 줄 */
-.welcome-title::after {
-  content: '';
-  display: block;
-  margin: 10px auto 0;
-  width: 100%;
+/* 국기 삼색 줄 */
+.welcome-title-stripe {
+  display: flex;
   height: 6px;
-  background: linear-gradient(90deg,
-    var(--blue) 0%,
-    var(--blue) 30%,
-    #fff 30%, #fff 33%,
-    var(--red) 33%, var(--red) 67%,
-    #fff 67%, #fff 70%,
-    var(--blue) 70%, var(--blue) 100%
-  );
+  width: 100%;
+  margin-bottom: 12px;
 }
+.welcome-title-stripe span:nth-child(1) { flex:1; background: var(--blue); }
+.welcome-title-stripe span:nth-child(2) { width: 8px; background: #fff; border-left:2px solid #ddd; border-right:2px solid #ddd; }
+.welcome-title-stripe span:nth-child(3) { flex:3; background: var(--red); }
+.welcome-title-stripe span:nth-child(4) { width: 8px; background: #fff; border-left:2px solid #ddd; border-right:2px solid #ddd; }
+.welcome-title-stripe span:nth-child(5) { flex:1; background: var(--blue); }
 
 .welcome-sub {
-  color: var(--text-dim);
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--ink-mid);
   line-height: 1.8;
-  margin: 16px 0 28px;
-  padding: 12px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--red);
+  margin-bottom: 18px;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 1px solid #D0C0B8;
+  border-left: 5px solid var(--red);
   text-align: left;
   width: 100%;
 }
 .welcome-sub strong { color: var(--red); font-weight: 900; }
 
-/* 카드 */
+/* 추천 카드 — NK 포털 기사 박스 */
 .suggestion-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
 }
 .suggestion-card {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--blue);
-  border-radius: 0 0 8px 8px;
-  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid #C8B0A8;
+  border-top: 4px solid var(--blue);
+  padding: 13px 14px;
   cursor: pointer;
   text-align: left;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   font-family: inherit;
-  color: var(--text);
-  transition: border-color .15s, box-shadow .15s;
+  color: var(--ink);
+  transition: border-top-color .12s, box-shadow .12s;
 }
 .suggestion-card:hover {
   border-top-color: var(--red);
-  box-shadow: 0 2px 12px rgba(205,46,58,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
-
-.card-icon { font-size: 22px; flex-shrink: 0; line-height: 1.2; }
-.card-text  { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; }
-.card-text span {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-dim);
-  margin-top: 3px;
-}
+.card-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+.card-text  { font-size: 13px; font-weight: 700; line-height: 1.4; }
+.card-text span { display:block; font-size:11px; font-weight:400; color:var(--ink-dim); margin-top:3px; }
 
 /* ============================================================
    메시지
@@ -483,228 +393,172 @@ body {
 .messages {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   max-width: 760px;
   width: 100%;
 }
-.message { display: flex; gap: 12px; animation: fadeIn .25s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+.message { display: flex; gap: 10px; animation: fadeIn .22s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
 
-/* 사용자 메시지 */
+/* 사용자 */
 .message.user { flex-direction: row-reverse; }
 .message.user .msg-bubble {
   background: var(--red);
-  border-radius: 18px 18px 4px 18px;
-  padding: 11px 16px;
+  border: 1px solid var(--red-dk);
+  padding: 10px 15px;
   max-width: 70%;
   font-size: 14px;
   line-height: 1.6;
   color: #fff;
 }
 
-/* AI 메시지 */
+/* AI */
 .message.ai { align-items: flex-start; }
 .ai-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 30px; height: 30px;
   background: var(--red);
-  border: 2px solid var(--red-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: #fff;
-  flex-shrink: 0;
+  border: 2px solid var(--red-dk);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #fff; flex-shrink: 0;
 }
 .message.ai .msg-bubble {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--red);
-  border-radius: 4px 18px 18px 18px;
-  padding: 14px 18px;
+  background: var(--white);
+  border: 1px solid #C8B0A8;
+  border-left: 4px solid var(--red);
+  padding: 13px 16px;
   font-size: 14px;
   line-height: 1.9;
   max-width: 82%;
-  color: var(--text);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  color: var(--ink);
 }
 
 /* 액션 버튼 */
-.msg-actions {
-  display: flex;
-  gap: 3px;
-  margin-top: 6px;
-  opacity: 0;
-  transition: opacity .15s;
-}
-.message:hover .msg-actions { opacity: 1; }
+.msg-actions { display:flex; gap:2px; margin-top:5px; opacity:0; transition:opacity .12s; }
+.message:hover .msg-actions { opacity:1; }
 .msg-action-btn {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  color: var(--text-dim);
+  background: var(--white);
+  border: 1px solid #C8B0A8;
+  color: var(--ink-dim);
   cursor: pointer;
-  padding: 3px 9px;
-  font-size: 12px;
-  font-family: inherit;
-  transition: border-color .1s, color .1s, background .1s;
+  padding: 2px 8px;
+  font-size: 11px; font-family: inherit;
+  transition: border-color .1s, color .1s;
 }
 .msg-action-btn:hover { border-color: var(--red); color: var(--red); }
 
 /* 타이핑 */
-.typing-indicator { display: flex; gap: 5px; align-items: center; padding: 6px 0; }
+.typing-indicator { display:flex; gap:5px; align-items:center; padding:6px 0; }
 .typing-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--red);
+  width:7px; height:7px; background:var(--red);
   animation: bounce 1.2s ease-in-out infinite;
 }
-.typing-dot:nth-child(2) { animation-delay: .2s; }
-.typing-dot:nth-child(3) { animation-delay: .4s; }
-@keyframes bounce {
-  0%,60%,100% { transform: translateY(0); }
-  30%          { transform: translateY(-8px); }
-}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
 
 /* ============================================================
    입력 영역
    ============================================================ */
 .input-area {
-  padding: 14px 22px 18px;
-  background: var(--bg-card);
-  border-top: 3px solid var(--red);
+  padding: 12px 20px 16px;
+  background: var(--white);
+  border-top: 4px solid var(--red);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+}
+/* 파란 보조선 */
+.input-area::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--blue);
+  margin-bottom: 4px;
+  max-width: 760px;
 }
 .input-box {
   width: 100%;
   max-width: 760px;
-  background: var(--bg);
-  border: 1px solid var(--line-bold);
-  border-radius: 14px;
+  background: var(--paper);
+  border: 1px solid #C0A898;
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  padding: 10px 13px;
-  transition: border-color .15s, box-shadow .15s;
+  padding: 9px 12px;
+  transition: border-color .15s;
 }
-.input-box:focus-within {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(205,46,58,0.1);
-}
-
+.input-box:focus-within { border-color: var(--red); }
 .input-field {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text);
+  flex:1; background:none; border:none; outline:none;
+  color: var(--ink);
   font-family: 'WK궁체', 'Noto Serif KR', '궁서체', Georgia, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  resize: none;
-  max-height: 180px;
-  overflow-y: auto;
+  font-size: 14px; line-height: 1.6;
+  resize: none; max-height: 180px; overflow-y: auto;
 }
-.input-field::placeholder { color: var(--text-dim); }
-
-.input-actions { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+.input-field::placeholder { color: #A09080; }
+.input-actions { display:flex; align-items:center; gap:3px; flex-shrink:0; }
 .attach-btn, .mic-btn {
-  background: none;
-  border: none;
-  color: #B0A0A0;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .12s, color .12s;
+  background:none; border:none; color:#A09080; cursor:pointer;
+  padding:5px; display:flex; align-items:center; justify-content:center;
+  transition:color .1s;
 }
-.attach-btn:hover, .mic-btn:hover { background: var(--bg-hover); color: var(--text); }
-
+.attach-btn:hover,.mic-btn:hover { color:var(--ink); }
 .send-btn {
-  background: var(--red);
-  border: none;
-  border-radius: 9px;
-  color: #fff;
-  cursor: pointer;
-  padding: 7px 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--red); border: none; color: #fff;
+  cursor: pointer; padding: 7px 9px;
+  display: flex; align-items: center; justify-content: center;
   transition: background .12s, transform .1s;
 }
-.send-btn:hover  { background: var(--red-light); }
+.send-btn:hover  { background: var(--red-lt); }
 .send-btn:active { transform: scale(.95); }
-
-.disclaimer {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-align: center;
-  max-width: 760px;
-}
+.disclaimer { font-size:10px; color:#A09080; text-align:center; max-width:760px; }
 
 /* ============================================================
    스크롤바
    ============================================================ */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--line-bold); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #C0A898; }
 ::-webkit-scrollbar-thumb:hover { background: var(--red); }
 
 /* ============================================================
-   마퀴 배너
+   마퀴 배너 — 파랑 (KCNA 속보 테이프)
    ============================================================ */
 .manifesto {
   position: fixed;
   top: 0; left: 0; right: 0;
-  background: var(--blue);
-  border-bottom: 2px solid #013A7A;
-  color: #D0E8FF;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 4px 0;
-  z-index: 100;
-  white-space: nowrap;
-  overflow: hidden;
+  background: var(--blue-dk);
+  border-bottom: 2px solid var(--blue);
+  color: #A8C8FF;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  padding: 4px 0; z-index: 100;
+  white-space: nowrap; overflow: hidden;
 }
-.manifesto-inner {
-  display: inline-block;
-  animation: scroll 30s linear infinite;
-}
-@keyframes scroll {
-  0%   { transform: translateX(100vw); }
-  100% { transform: translateX(-100%); }
-}
+.manifesto-inner { display:inline-block; animation:scroll 32s linear infinite; }
+@keyframes scroll { 0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)} }
 
 /* ============================================================
    혁명 배경 모드
    ============================================================ */
 body.revolutionary::after {
-  content: '';
-  position: fixed;
-  inset: 0;
+  content:''; position:fixed; inset:0;
   background: repeating-linear-gradient(
     -45deg, transparent 0, transparent 20px,
-    rgba(205,46,58,.04) 20px, rgba(205,46,58,.04) 21px
+    rgba(200,16,46,.04) 20px, rgba(200,16,46,.04) 21px
   );
-  pointer-events: none;
-  z-index: 0;
+  pointer-events:none; z-index:0;
 }
 
 /* ============================================================
    반응형
    ============================================================ */
-@media (max-width: 700px) {
+@media (max-width:700px) {
   .sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); }
   .sidebar.open { transform: translateX(0); }
   .main { margin-left: 0 !important; }
   .suggestion-grid { grid-template-columns: 1fr; }
-  .welcome-title { font-size: 24px; }
+  .welcome-title { font-size: 22px; }
 }
