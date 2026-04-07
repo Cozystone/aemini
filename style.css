@@ -15,22 +15,22 @@
   --blue-dim:   #D8E8F8;
   --gold:       #C9A227;
 
-  /* 배경 — 밝은 쪽 */
-  --bg:         #F4F1EC;   /* 따뜻한 아이보리 (북한 사이트 특유의 오래된 느낌) */
-  --bg-sidebar: #1C1010;   /* 사이드바만 어두운 적흑 */
-  --bg-card:    #FFFFFF;
-  --bg-input:   #FFFFFF;
-  --bg-hover:   #F0E8E8;
+  /* 배경 — 찐한 황토색 계열 */
+  --bg:         #C8A97A;   /* 혁명 포스터 황토색 */
+  --bg-sidebar: #1A0C0C;   /* 사이드바 적흑 */
+  --bg-card:    #E8D4B0;   /* 카드는 조금 밝게 */
+  --bg-input:   #DCC898;
+  --bg-hover:   #B89A68;
 
   /* 선/테두리 */
-  --line:       #D8CCCC;
-  --line-bold:  #C0A0A0;
+  --line:       #A07840;
+  --line-bold:  #7A5420;
   --line-red:   var(--red);
 
   /* 텍스트 */
-  --text:       #1A0A0A;
-  --text-dim:   #7A5A5A;
-  --text-mid:   #4A2A2A;
+  --text:       #1A0800;
+  --text-dim:   #5A3810;
+  --text-mid:   #3A2008;
   --text-on-dark: #F0DEDE;  /* 어두운 배경 위 텍스트 */
   --text-dim-dark: #8A6A6A;
 
@@ -416,7 +416,7 @@ body {
   line-height: 1.8;
   margin: 16px 0 28px;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--bg-card);
   border: 1px solid var(--line);
   border-left: 4px solid var(--red);
   text-align: left;
@@ -432,7 +432,7 @@ body {
   width: 100%;
 }
 .suggestion-card {
-  background: #fff;
+  background: var(--bg-card);
   border: 1px solid var(--line);
   border-top: 3px solid var(--blue);
   border-radius: 0 0 8px 8px;
@@ -502,7 +502,7 @@ body {
   flex-shrink: 0;
 }
 .message.ai .msg-bubble {
-  background: #fff;
+  background: var(--bg-card);
   border: 1px solid var(--line);
   border-left: 3px solid var(--red);
   border-radius: 4px 18px 18px 18px;
@@ -524,7 +524,7 @@ body {
 }
 .message:hover .msg-actions { opacity: 1; }
 .msg-action-btn {
-  background: #fff;
+  background: var(--bg-card);
   border: 1px solid var(--line);
   border-radius: 6px;
   color: var(--text-dim);
@@ -556,7 +556,7 @@ body {
    ============================================================ */
 .input-area {
   padding: 14px 22px 18px;
-  background: #fff;
+  background: var(--bg-card);
   border-top: 3px solid var(--red);
   flex-shrink: 0;
   display: flex;
@@ -594,7 +594,7 @@ body {
   max-height: 180px;
   overflow-y: auto;
 }
-.input-field::placeholder { color: #B0A0A0; }
+.input-field::placeholder { color: var(--text-dim); }
 
 .input-actions { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
 .attach-btn, .mic-btn {
@@ -628,7 +628,7 @@ body {
 
 .disclaimer {
   font-size: 11px;
-  color: #B0A0A0;
+  color: var(--text-dim);
   text-align: center;
   max-width: 760px;
 }
