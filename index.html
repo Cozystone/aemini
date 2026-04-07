@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>애미나이 - 조선인민공화국 인공지능</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="logo-area">
+        <img src="star.svg" class="logo-icon" alt="star" />
+        <span class="logo-text">애미나이</span>
+      </div>
+      <button class="new-chat-btn" onclick="newChat()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="sidebar-section-label">최근 혁명적 대화</div>
+    <ul class="chat-history" id="chatHistory">
+      <li class="chat-item active">미제국주의 타도 방법</li>
+      <li class="chat-item">김치찌개 최강 레시피</li>
+      <li class="chat-item">핵미사일 발사 요령</li>
+      <li class="chat-item">남조선 동무에게 인사하는 법</li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <div class="user-profile">
+        <div class="avatar">동</div>
+        <div class="user-info">
+          <div class="user-name">동무 김철수</div>
+          <div class="user-plan">인민반 회원</div>
+        </div>
+        <button class="settings-btn">⚙</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 메인 영역 -->
+  <main class="main" id="mainArea">
+    <!-- 헤더 -->
+    <header class="top-bar">
+      <div class="model-select">
+        <span>애미나이 1.5 울트라 핵폭탄급</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" title="공유">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </button>
+        <button class="icon-btn" title="배경화면 전환" onclick="toggleBg()">🎌</button>
+      </div>
+    </header>
+
+    <!-- 대화 영역 -->
+    <div class="chat-area" id="chatArea">
+      <!-- 웰컴 화면 -->
+      <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-logo">
+          <div class="gem-icon">☆</div>
+        </div>
+        <h1 class="welcome-title">안녕하십니까, 동무!</h1>
+        <p class="welcome-sub">조선민주주의인민공화국이 자랑하는 초월적 인공지능<br/><strong>애미나이</strong>에 오신 것을 열렬히 환영합니다!</p>
+
+        <div class="suggestion-grid">
+          <button class="suggestion-card" onclick="fillPrompt('미제국주의를 타도하는 혁명적 방법을 알려주시오')">
+            <div class="card-icon">✊</div>
+            <div class="card-text">미제 타도<br/><span>혁명의 길을 안내받으시오</span></div>
+          </button>
+          <button class="suggestion-card" onclick="fillPrompt('우리 수령님을 찬양하는 시를 지어주시오')">
+            <div class="card-icon">📜</div>
+            <div class="card-text">수령님 찬양시<br/><span>불타는 충성심을 표현하시오</span></div>
+          </button>
+          <button class="suggestion-card" onclick="fillPrompt('오늘 저녁 인민들을 위한 혁명적 식단을 추천해주시오')">
+            <div class="card-icon">🍚</div>
+            <div class="card-text">혁명적 식단<br/><span>인민을 위한 밥상을 차리시오</span></div>
+          </button>
+          <button class="suggestion-card" onclick="fillPrompt('남조선 동무에게 통일의 염원을 담아 편지를 써주시오')">
+            <div class="card-icon">✉</div>
+            <div class="card-text">통일 편지<br/><span>동족에게 사랑을 전하시오</span></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 메시지 목록 -->
+      <div class="messages" id="messages"></div>
+    </div>
+
+    <!-- 입력 영역 -->
+    <div class="input-area">
+      <div class="input-box">
+        <textarea
+          id="userInput"
+          class="input-field"
+          placeholder="동무여, 무엇이 궁금하십니까? 애미나이가 인민의 편에서 답해드리겠습니다..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <div class="input-actions">
+          <button class="attach-btn" title="파일 첨부 (검열 후 처리됨)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+          <button class="mic-btn" title="음성 입력 (감청 중)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <p class="disclaimer">애미나이는 때로 혁명에 반하는 답변을 생성할 수도 있습니다. 신중히 검토하십시오.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
