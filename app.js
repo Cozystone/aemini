@@ -370,6 +370,12 @@ window.addEventListener('DOMContentLoaded', () => {
   applyAllSettings();
   updateProfileUI();
   updateModelUI();
+
+  // 마지막 대화 자동 이어받기
+  const savedChats = getChats();
+  if (savedChats.length > 0) {
+    loadChat(savedChats[0].id);
+  }
 });
 
 // ============================================================
