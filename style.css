@@ -5,6 +5,44 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap');
 
+/* ── 북한 WK 폰트 (fonts/ 폴더에 파일 배치 필요) ── */
+@font-face {
+  font-family: 'WK궁체';
+  src: url('fonts/WK궁체.ttf') format('truetype'),
+       url('fonts/WK궁체.otf') format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'WK붓글';
+  src: url('fonts/WK붓글.ttf') format('truetype'),
+       url('fonts/WK붓글.otf') format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'WK예붓글';
+  src: url('fonts/WK예붓글.ttf') format('truetype'),
+       url('fonts/WK예붓글.otf') format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'WKW예서';
+  src: url('fonts/WKW예서.ttf') format('truetype'),
+       url('fonts/WKW예서.otf') format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'WK문화';
+  src: url('fonts/WK문화.ttf') format('truetype'),
+       url('fonts/WK문화.otf') format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'WK고직';
+  src: url('fonts/WK고직.ttf') format('truetype'),
+       url('fonts/WK고직.otf') format('opentype');
+  font-weight: normal;
+}
+
 :root {
   /* 북한 국기 색상 */
   --red:        #CD2E3A;   /* 국기 빨강 */
@@ -41,7 +79,8 @@
 html, body { height: 100%; overflow: hidden; }
 
 body {
-  font-family: 'Noto Serif KR', '궁서체', '궁서', Georgia, serif;
+  /* WK궁체 우선, 없으면 Noto Serif KR → 궁서체 순 fallback */
+  font-family: 'WK궁체', 'Noto Serif KR', '궁서체', '궁서', Georgia, serif;
   background: var(--bg);
   color: var(--text);
   display: flex;
@@ -110,6 +149,8 @@ body {
   color: #fff;
   letter-spacing: 3px;
   text-shadow: 1px 1px 0 var(--red-dark);
+  /* 로고: 붓글 느낌 */
+  font-family: 'WK붓글', 'WK궁체', 'Noto Serif KR', '궁서', serif;
 }
 
 /* 검색창 */
@@ -391,6 +432,8 @@ body {
   color: var(--text);
   letter-spacing: 3px;
   margin-bottom: 6px;
+  /* 제목: 예서/붓글 느낌 */
+  font-family: 'WK예붓글', 'WKW예서', 'WK궁체', 'Noto Serif KR', '궁서', serif;
 }
 
 /* 제목 아래 국기색 줄 */
@@ -587,7 +630,7 @@ body {
   border: none;
   outline: none;
   color: var(--text);
-  font-family: 'Noto Serif KR', '궁서체', Georgia, serif;
+  font-family: 'WK궁체', 'Noto Serif KR', '궁서체', Georgia, serif;
   font-size: 14px;
   line-height: 1.6;
   resize: none;
