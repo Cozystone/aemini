@@ -16,44 +16,45 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'API key not configured' });
   }
 
   const { messages } = req.body;
 
-  // 시스템 프롬프트를 첫 대화로 삽입 (system_instruction 대신)
-  const contents = [
-    { role: 'user',  parts: [{ text: SYSTEM_PROMPT }] },
-    { role: 'model', parts: [{ text: '알겠소, 동무. 에미나이로서 혁명적으로 답변드리겠소. ☆' }] },
+  const chatMessages = [
+    { role: 'system', content: SYSTEM_PROMPT },
     ...(messages || []).map(m => ({
-      role: m.role === 'ai' ? 'model' : 'user',
-      parts: [{ text: m.text }]
+      role: m.role === 'ai' ? 'assistant' : 'user',
+      content: m.text
     }))
   ];
 
-  const body = {
-    contents,
-    generationConfig: { temperature: 0.9, maxOutputTokens: 1024 }
-  };
-
   try {
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-    );
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: chatMessages,
+        temperature: 0.9,
+        max_tokens: 1024
+      })
+    });
 
-    const data = await geminiRes.json();
+    const data = await groqRes.json();
 
-    if (!geminiRes.ok || data.error) {
-      console.error('Gemini error:', JSON.stringify(data));
-      return res.status(502).json({ error: data.error?.message || 'Gemini API error' });
+    if (!groqRes.ok || data.error) {
+      console.error('Groq error:', JSON.stringify(data));
+      return res.status(502).json({ error: data.error?.message || 'Groq API error' });
     }
 
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = data.choices?.[0]?.message?.content;
     if (!text) {
-      console.error('Empty response:', JSON.stringify(data));
       return res.status(502).json({ error: 'empty response' });
     }
 
