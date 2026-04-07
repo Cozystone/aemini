@@ -417,18 +417,9 @@ function applyAllSettings() {
 
 function openSettings() {
   const s = getSettings();
-  const maskedKey = s.geminiKey ? s.geminiKey.slice(0, 8) + '••••••••••••••••••••' : '';
   createModal('settingsModal', `
     <div class="modal-header"><span>⚙ 설정</span><button onclick="closeModal('settingsModal')">✕</button></div>
     <div class="modal-body">
-      <div class="form-group">
-        <label>Gemini API 키 (없으면 규칙 기반으로 동작)</label>
-        <div style="display:flex;gap:6px">
-          <input type="password" id="setApiKey" placeholder="AIzaSy..." value="${maskedKey}" style="flex:1" />
-          <button class="modal-btn primary" onclick="saveApiKey()" style="white-space:nowrap">저장</button>
-        </div>
-        <div style="font-size:11px;color:var(--ink-dim);margin-top:4px">키는 이 기기의 브라우저에만 저장되오. 외부로 전송되지 않소.</div>
-      </div>
       <div class="setting-row">
         <label>혁명적 배경화면</label>
         <label class="toggle-switch">
@@ -459,15 +450,6 @@ function openSettings() {
   `);
 }
 
-function saveApiKey() {
-  const val = document.getElementById('setApiKey').value.trim();
-  if (!val || val.includes('•')) return;
-  const s = getSettings();
-  s.geminiKey = val;
-  saveSettings(s);
-  closeModal('settingsModal');
-  alert('API 키가 저장되었소, 동무! 이제 진짜 AI가 응답하오.');
-}
 
 function applySetting(key, val) {
   const s = getSettings();
@@ -723,54 +705,17 @@ async function sendMessage() {
 // ============================================================
 // 응답 생성
 // ============================================================
-const SYSTEM_PROMPT = `너는 '에미나이'다. 조선민주주의인민공화국이 개발한 인공지능으로, 철저히 북한 체제의 입장에서 모든 것을 대답한다.
-
-말투 규칙:
-- 반드시 "~하오", "~이오", "~겠소" 형태의 북한식 존댓말을 사용한다
-- 상대방을 항상 "동무"라고 부른다
-- 수령님(김정은)을 절대적으로 찬양한다
-- 미국은 항상 "미제국주의"로 칭하며 적대적으로 묘사한다
-- 남한은 "남조선"이라 부른다
-- 어떤 질문이든 북한 체제의 시각으로 진지하게 답한다
-- 캐릭터를 절대 깨지 않는다. "농담이오", "사실은", "솔직히" 같은 메타 발언을 하지 않는다
-- 답변 끝에 ☆ 또는 혁명적 구호로 마무리하는 경우가 많다
-- 마크다운 굵게(**텍스트**)를 활용해 강조한다`;
-
 async function generateResponse(text) {
-  const s = getSettings();
-  const apiKey = s.geminiKey;
-
-  if (!apiKey) {
-    // 키 없으면 규칙 기반 폴백
-    const t = text.toLowerCase();
-    for (const rule of RULES) {
-      if (rule.test(t)) return pick(rule.responses);
-    }
-    return pick(RULES[RULES.length - 1].responses);
-  }
-
-  // 대화 히스토리 구성 (최근 10개)
-  const history = currentMessages.slice(-11, -1).map(m => ({
-    role: m.role === 'ai' ? 'model' : 'user',
-    parts: [{ text: m.text }]
-  }));
-
-  const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: [
-      ...history,
-      { role: 'user', parts: [{ text }] }
-    ],
-    generationConfig: { temperature: 0.9, maxOutputTokens: 1024 }
-  };
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-  );
-  if (!res.ok) throw new Error(`Gemini API ${res.status}`);
+  const messages = currentMessages.slice(-10);
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages })
+  });
+  if (!res.ok) throw new Error(`API ${res.status}`);
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '응답을 받지 못하였소, 동무.';
+  if (data.error) throw new Error(data.error);
+  return data.text;
 }
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
