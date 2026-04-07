@@ -288,7 +288,7 @@ function renderChatHistory() {
 
   ul.innerHTML = '';
   if (chats.length === 0) {
-    ul.innerHTML = '<li class="no-results" style="display:block">대화 기록 없음</li>';
+    ul.innerHTML = '';
     return;
   }
   chats.forEach(chat => {
