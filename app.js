@@ -256,7 +256,8 @@ function saveCurrentChat() {
   const firstUser = currentMessages.find(m => m.role === 'user');
   const title = firstUser ? firstUser.text.slice(0, 24) + (firstUser.text.length > 24 ? '...' : '') : '새 대화';
   const chat = { id: currentChatId, title, messages: currentMessages, updatedAt: Date.now() };
-  if (idx >= 0) chats[idx] = chat; else chats.unshift(chat);
+  if (idx >= 0) chats.splice(idx, 1);
+  chats.unshift(chat);
   saveChats(chats);
   renderChatHistory();
 }
@@ -296,7 +297,7 @@ function renderChatHistory() {
     li.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
     li.dataset.id = chat.id;
     li.dataset.title = chat.title;
-    li.innerHTML = `<span class="chat-item-text">${escapeHtml(chat.title)}</span>
+    li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${escapeHtml(chat.title)}</span>
       <button class="chat-item-del" title="삭제" onclick="deleteChatById(event,'${chat.id}')">×</button>`;
     li.addEventListener('click', (e) => { if (!e.target.classList.contains('chat-item-del')) loadChat(chat.id); });
     ul.appendChild(li);
