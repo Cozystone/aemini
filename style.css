@@ -1,58 +1,47 @@
 /* ============================================================
-   애미나이 - 조선인민공화국 인공지능 UI
-   브루털리즘 × 북한 혁명 감성
+   에미나이 - 조선인민공화국 인공지능 UI
+   로동신문 × 혁명 선전화 감성 · 완전 2D 플랫
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap');
 
-/* --- 변수 --- */
+/* ── 변수 ── */
 :root {
-  --red-deep:    #6B0000;
-  --red-mid:     #AA0000;
-  --red-bright:  #CC1122;
-  --red-glow:    #FF2233;
-  --gold:        #B8860B;
-  --gold-light:  #DAA520;
-  --bg-dark:     #0A0404;
-  --bg-panel:    #110606;
-  --bg-card:     #1A0808;
-  --bg-input:    #150606;
-  --text-main:   #EED8D8;
-  --text-muted:  #885555;
-  --text-accent: #DAA520;
-  --border:      #4A1010;
-  --border-bold: #771111;
-  --sidebar-w:   264px;
-  --radius:      0px;
+  --red:       #CC0000;
+  --red-dark:  #880000;
+  --red-light: #EE1111;
+  --black:     #0D0D0D;
+  --paper:     #F0E8D8;     /* 누렇게 변한 신문지 */
+  --paper-mid: #D8CCBB;
+  --ink:       #111111;
+  --ink-mid:   #333333;
+  --ink-muted: #666666;
+  --gold:      #B8860B;
+  --white:     #FAFAF5;
+  --sidebar-w: 264px;
 }
 
-/* --- 기본 리셋 --- */
+/* ── 리셋 ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html, body { height: 100%; overflow: hidden; }
 
 body {
   font-family: 'Noto Serif KR', '궁서체', '궁서', 'GungsuhChe', Georgia, serif;
-  background: var(--bg-dark);
-  color: var(--text-main);
+  background: var(--black);
+  color: var(--ink);
   display: flex;
   font-size: 15px;
   line-height: 1.6;
 }
 
-/* 배경 패턴 - 거친 사선 */
+/* 배경 - 거친 격자 (신문 인쇄 느낌) */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0px,
-      transparent 18px,
-      rgba(100,0,0,0.04) 18px,
-      rgba(100,0,0,0.04) 19px
-    );
+    repeating-linear-gradient(0deg,   transparent 0, transparent 23px, rgba(200,0,0,0.04) 23px, rgba(200,0,0,0.04) 24px),
+    repeating-linear-gradient(90deg,  transparent 0, transparent 23px, rgba(200,0,0,0.04) 23px, rgba(200,0,0,0.04) 24px);
   pointer-events: none;
   z-index: 0;
 }
@@ -64,131 +53,119 @@ body::before {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.7);
   z-index: 9;
 }
 .sidebar-overlay.visible { display: block; }
 
 /* ============================================================
-   사이드바
+   사이드바 — 신문 사이드컬럼 스타일
    ============================================================ */
 .sidebar {
   width: var(--sidebar-w);
-  background: var(--bg-panel);
-  border-right: 3px solid var(--border-bold);
+  background: var(--paper);
+  border-right: 4px solid var(--red);
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   position: fixed;
   top: 0; left: 0; bottom: 0;
   z-index: 20;
   transform: translateX(0);
   transition: transform 0.22s ease;
-  will-change: transform;
 }
-.sidebar.collapsed {
-  transform: translateX(calc(-1 * var(--sidebar-w)));
-}
+.sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); }
 
+/* 사이드바 상단 — 빨간 헤더 바 */
 .sidebar-top {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 14px;
-  border-bottom: 2px solid var(--border-bold);
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--red);
+  border-bottom: 3px solid var(--red-dark);
   flex-shrink: 0;
 }
 
 .new-chat-btn {
   background: none;
-  border: 2px solid var(--border);
-  color: var(--text-muted);
+  border: 2px solid rgba(255,255,255,0.5);
+  color: #fff;
   cursor: pointer;
-  padding: 5px 7px;
+  padding: 4px 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s, color 0.15s;
+  transition: border-color 0.1s, background 0.1s;
   margin-left: auto;
 }
-.new-chat-btn:hover {
-  border-color: var(--red-mid);
-  color: var(--text-main);
-}
+.new-chat-btn:hover { border-color: #fff; background: rgba(255,255,255,0.15); }
 
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.logo-icon { width: 26px; height: 26px; }
-
-.logo-text {
-  font-size: 20px;
+.logo-area { display: flex; align-items: center; gap: 8px; }
+.logo-icon  { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.logo-text  {
+  font-size: 18px;
   font-weight: 900;
-  color: var(--red-bright);
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 0 #000, 0 0 16px rgba(204,17,34,0.6);
+  color: #fff;
+  letter-spacing: 3px;
+  text-shadow: 1px 1px 0 var(--red-dark);
 }
 
 /* 검색창 */
-.sidebar-search {
-  padding: 10px 10px 4px;
-  flex-shrink: 0;
-}
+.sidebar-search { padding: 8px 10px 4px; flex-shrink: 0; }
 .search-box {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  padding: 6px 10px;
-  transition: border-color 0.15s;
+  gap: 7px;
+  background: var(--white);
+  border: 2px solid var(--ink-mid);
+  padding: 5px 9px;
 }
-.search-box:focus-within { border-color: var(--red-mid); }
-.search-box svg { color: var(--text-muted); flex-shrink: 0; }
+.search-box:focus-within { border-color: var(--red); }
+.search-box svg { color: var(--ink-muted); flex-shrink: 0; }
 .search-box input {
   background: none;
   border: none;
   outline: none;
-  color: var(--text-main);
+  color: var(--ink);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   width: 100%;
 }
-.search-box input::placeholder { color: var(--text-muted); }
+.search-box input::placeholder { color: var(--ink-muted); }
 
-/* 섹션 레이블 */
+/* 섹션 레이블 — 로동신문식 구분선 */
 .sidebar-section-label {
   font-size: 10px;
-  font-weight: 700;
-  color: var(--red-mid);
+  font-weight: 900;
+  color: var(--white);
+  background: var(--ink);
   letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 12px 14px 6px;
-  border-bottom: 1px solid var(--border);
+  padding: 5px 12px;
+  border-top: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
   flex-shrink: 0;
+  margin-top: 6px;
 }
 
 /* 채팅 히스토리 */
 .chat-history {
   list-style: none;
-  padding: 6px 0;
+  padding: 4px 0;
   flex: 1;
   overflow-y: auto;
+  background: var(--paper);
 }
 
 .chat-item {
   display: flex;
   align-items: center;
-  padding: 9px 14px;
+  padding: 8px 12px;
   cursor: pointer;
-  font-size: 13px;
-  color: var(--text-muted);
-  transition: background 0.1s, color 0.1s;
-  border-bottom: 1px solid rgba(74,16,16,0.4);
+  font-size: 12px;
+  color: var(--ink-mid);
+  border-bottom: 1px solid var(--paper-mid);
   gap: 6px;
+  transition: background 0.1s;
 }
 .chat-item-text {
   flex: 1;
@@ -203,83 +180,81 @@ body::before {
   border: none;
   color: transparent;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
-  padding: 0 3px;
+  padding: 0 2px;
   transition: color 0.1s;
 }
-.chat-item:hover .chat-item-del { color: var(--text-muted); }
-.chat-item-del:hover { color: var(--red-bright) !important; }
-.chat-item:hover {
-  background: rgba(100,0,0,0.25);
-  color: var(--text-main);
-}
+.chat-item:hover .chat-item-del { color: var(--ink-muted); }
+.chat-item-del:hover { color: var(--red) !important; }
+.chat-item:hover { background: var(--paper-mid); color: var(--ink); }
 .chat-item.active {
-  background: rgba(100,0,0,0.35);
-  color: var(--text-main);
-  border-left: 4px solid var(--red-bright);
-  padding-left: 10px;
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  border-bottom-color: var(--red-dark);
 }
+.chat-item.active .chat-item-del { color: rgba(255,255,255,0.5) !important; }
 .chat-item.hidden { display: none; }
 
 .no-results {
   text-align: center;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   font-size: 12px;
-  padding: 20px 0;
+  padding: 16px 0;
   display: none;
   list-style: none;
 }
 
 /* 사이드바 하단 */
 .sidebar-bottom {
-  padding: 12px;
-  border-top: 2px solid var(--border-bold);
+  padding: 10px;
+  border-top: 3px solid var(--red);
   flex-shrink: 0;
+  background: var(--paper);
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
+  gap: 9px;
+  padding: 7px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: border-color 0.15s;
+  transition: border-color 0.1s;
 }
-.user-profile:hover { border-color: var(--border); }
+.user-profile:hover { border-color: var(--red); }
 
 .avatar {
-  width: 34px;
-  height: 34px;
-  background: var(--red-deep);
+  width: 32px;
+  height: 32px;
+  background: var(--red);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 900;
   color: #fff;
   flex-shrink: 0;
-  border: 2px solid var(--gold);
+  border: 2px solid var(--ink);
 }
 
 .user-info { flex: 1; min-width: 0; }
-.user-name { font-size: 13px; font-weight: 700; color: var(--text-main); }
-.user-plan  { font-size: 11px; color: var(--gold); }
+.user-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.user-plan  { font-size: 10px; color: var(--gold); font-weight: 700; }
 
 .settings-btn {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
-  transition: color 0.15s;
+  font-size: 15px;
+  transition: color 0.1s;
 }
-.settings-btn:hover { color: var(--text-main); }
+.settings-btn:hover { color: var(--red); }
 
 /* ============================================================
-   메인 영역
+   메인
    ============================================================ */
 .main {
   flex: 1;
@@ -290,79 +265,81 @@ body::before {
   z-index: 1;
   margin-left: var(--sidebar-w);
   transition: margin-left 0.22s ease;
+  background: var(--black);
 }
 .main.expanded { margin-left: 0; }
 
-/* 상단 바 */
+/* 상단 바 — 신문 마스트헤드 */
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  border-bottom: 3px solid var(--border-bold);
-  background: var(--bg-panel);
+  padding: 8px 14px;
+  background: var(--red);
+  border-bottom: 4px solid var(--red-dark);
   flex-shrink: 0;
   gap: 8px;
 }
 
 .top-bar-left { display: flex; align-items: center; }
 
-/* 햄버거 버튼 */
+/* 햄버거 */
 .menu-btn {
   background: none;
-  border: 2px solid var(--border);
+  border: 2px solid rgba(255,255,255,0.4);
   cursor: pointer;
-  padding: 7px 8px;
+  padding: 6px 7px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   transition: border-color 0.15s;
 }
-.menu-btn:hover { border-color: var(--red-mid); }
+.menu-btn:hover { border-color: #fff; }
 
 .hamburger-line {
   display: block;
-  width: 18px;
+  width: 17px;
   height: 2px;
-  background: var(--text-muted);
-  transition: background 0.15s, transform 0.22s, opacity 0.22s;
+  background: #fff;
   transform-origin: center;
+  transition: transform 0.2s, opacity 0.2s;
 }
-.menu-btn:hover .hamburger-line { background: var(--text-main); }
-.menu-btn.open .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-btn.open .hamburger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .menu-btn.open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.menu-btn.open .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-btn.open .hamburger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
+/* 모델 선택 — 신문 날짜란처럼 */
 .model-select {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  font-size: 13px;
-  color: var(--text-main);
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--red-dark);
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 12px;
+  color: #fff;
   cursor: pointer;
-  transition: border-color 0.15s;
   font-family: inherit;
+  letter-spacing: 0.5px;
+  transition: background 0.1s;
 }
-.model-select:hover { border-color: var(--red-mid); }
+.model-select:hover { background: var(--black); }
 
-.top-actions { display: flex; gap: 4px; }
+.top-actions { display: flex; gap: 3px; }
 
 .icon-btn {
   background: none;
-  border: 2px solid transparent;
-  color: var(--text-muted);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.8);
   cursor: pointer;
-  padding: 6px 8px;
+  padding: 5px 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s, color 0.15s;
-  font-size: 16px;
+  font-size: 15px;
+  transition: border-color 0.1s, color 0.1s;
 }
-.icon-btn:hover { border-color: var(--border); color: var(--text-main); }
+.icon-btn:hover { border-color: #fff; color: #fff; }
 
 /* ============================================================
    대화 영역
@@ -370,108 +347,105 @@ body::before {
 .chat-area {
   flex: 1;
   overflow-y: auto;
-  padding: 28px 24px;
+  padding: 20px 20px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: var(--black);
 }
 
-/* 웰컴 화면 */
+/* ── 웰컴 ── */
 .welcome-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  max-width: 680px;
+  max-width: 660px;
   width: 100%;
   margin: auto;
-  padding: 24px 0 0;
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.3s ease;
 }
 
-.welcome-logo { margin-bottom: 16px; }
+.welcome-logo { margin-bottom: 14px; }
 
 .gem-icon {
-  font-size: 72px;
+  font-size: 64px;
   line-height: 1;
-  color: var(--red-bright);
-  text-shadow:
-    4px 4px 0 #000,
-    0 0 24px rgba(204,17,34,0.7);
-  animation: pulse 3s ease-in-out infinite;
+  color: var(--red);
+  text-shadow: none;
+  /* 인쇄 느낌 — 레이어 오프셋 */
+  filter: drop-shadow(2px 2px 0 #550000) drop-shadow(-1px -1px 0 #ff4444);
+  animation: stampPulse 3s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { text-shadow: 4px 4px 0 #000, 0 0 20px rgba(204,17,34,0.7); }
-  50%       { text-shadow: 4px 4px 0 #000, 0 0 40px rgba(204,17,34,1), 0 0 80px rgba(204,17,34,0.3); }
+@keyframes stampPulse {
+  0%, 100% { filter: drop-shadow(2px 2px 0 #550000) drop-shadow(-1px -1px 0 #ff4444); }
+  50%       { filter: drop-shadow(3px 3px 0 #330000) drop-shadow(-1px -1px 0 #ff6666); }
 }
 
+/* 제호 — 로동신문 마스트헤드 스타일 */
 .welcome-title {
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 900;
-  color: var(--text-main);
-  text-shadow: 3px 3px 0 var(--red-deep);
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-  border-bottom: 3px solid var(--red-mid);
-  padding-bottom: 10px;
+  color: var(--red);
+  letter-spacing: 4px;
+  border-top: 4px double var(--red);
+  border-bottom: 4px double var(--red);
+  padding: 10px 20px;
+  margin-bottom: 12px;
+  background: var(--paper);
+  width: 100%;
 }
 
 .welcome-sub {
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.8;
-  margin-bottom: 32px;
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  background: var(--bg-card);
+  color: var(--paper-mid);
+  font-size: 13px;
+  line-height: 1.9;
+  margin-bottom: 24px;
+  border: 2px solid var(--ink-mid);
+  border-left: 6px solid var(--red);
+  padding: 10px 14px;
+  background: #1A0A0A;
+  text-align: left;
+  width: 100%;
 }
-.welcome-sub strong {
-  color: var(--red-bright);
-  font-weight: 700;
-}
+.welcome-sub strong { color: var(--red-light); font-weight: 900; }
 
-/* 추천 카드 그리드 */
+/* 카드 그리드 — 신문 기사 박스 */
 .suggestion-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
 }
 
 .suggestion-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  padding: 14px 16px;
+  background: #1A0A0A;
+  border: 2px solid var(--ink-mid);
+  border-top: 4px solid var(--red);
+  padding: 12px 14px;
   cursor: pointer;
   text-align: left;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  transition: border-color 0.15s, background 0.15s;
+  gap: 10px;
   font-family: inherit;
-  color: var(--text-main);
+  color: var(--paper);
+  transition: border-color 0.1s, background 0.1s;
 }
 .suggestion-card:hover {
-  border-color: var(--red-mid);
-  background: rgba(100,0,0,0.2);
+  border-color: var(--red);
+  background: #260E0E;
 }
-.suggestion-card:active { background: rgba(100,0,0,0.35); }
+.suggestion-card:active { background: #330808; }
 
-.card-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
-
-.card-text {
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--text-main);
-}
+.card-icon { font-size: 20px; flex-shrink: 0; line-height: 1.2; }
+.card-text  { font-size: 13px; font-weight: 700; color: var(--paper); line-height: 1.4; }
 .card-text span {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
-  color: var(--text-muted);
+  color: var(--ink-muted);
   margin-top: 3px;
 }
 
@@ -481,123 +455,134 @@ body::before {
 .messages {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   max-width: 760px;
   width: 100%;
 }
 
-.message { display: flex; gap: 12px; animation: fadeIn 0.25s ease; }
+.message { display: flex; gap: 10px; animation: fadeIn 0.2s ease; }
 
-@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:none; } }
 
-/* 사용자 메시지 */
+/* 사용자 메시지 — 오른쪽, 붉은 도장 느낌 */
 .message.user { flex-direction: row-reverse; }
 
 .message.user .msg-bubble {
-  background: var(--red-deep);
-  border: 2px solid var(--red-mid);
-  padding: 10px 16px;
-  max-width: 75%;
+  background: var(--red-dark);
+  border: 2px solid var(--red);
+  border-left: 5px solid var(--red-light);
+  padding: 9px 14px;
+  max-width: 70%;
   font-size: 14px;
   line-height: 1.6;
-  box-shadow: 3px 3px 0 #000;
+  color: var(--paper);
 }
 
-/* AI 메시지 */
+/* AI 메시지 — 왼쪽, 신문지 느낌 */
 .message.ai { align-items: flex-start; }
 
 .ai-avatar {
-  width: 34px;
-  height: 34px;
-  background: var(--red-deep);
-  border: 2px solid var(--red-mid);
+  width: 30px;
+  height: 30px;
+  background: var(--red);
+  border: 2px solid var(--red-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 14px;
+  color: #fff;
   flex-shrink: 0;
-  box-shadow: 2px 2px 0 #000;
 }
 
 .message.ai .msg-bubble {
-  background: var(--bg-card);
-  border: 2px solid var(--border-bold);
-  padding: 14px 18px;
+  background: #1A0A0A;
+  border: 2px solid var(--ink-mid);
+  border-left: 5px solid var(--red);
+  padding: 12px 16px;
   font-size: 14px;
-  line-height: 1.8;
-  max-width: 80%;
-  box-shadow: 3px 3px 0 #000;
+  line-height: 1.9;
+  max-width: 82%;
+  color: var(--paper);
 }
 
+/* 메시지 액션 버튼 */
 .msg-actions {
   display: flex;
   gap: 2px;
-  margin-top: 6px;
+  margin-top: 5px;
   opacity: 0;
   transition: opacity 0.15s;
 }
 .message:hover .msg-actions { opacity: 1; }
 
 .msg-action-btn {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
+  background: #1A0A0A;
+  border: 1px solid var(--ink-mid);
+  color: var(--ink-muted);
   cursor: pointer;
-  padding: 3px 8px;
-  font-size: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
   font-family: inherit;
-  transition: border-color 0.1s, color 0.1s;
+  transition: border-color 0.1s, color 0.1s, background 0.1s;
 }
-.msg-action-btn:hover { border-color: var(--red-mid); color: var(--text-main); }
+.msg-action-btn:hover { border-color: var(--red); color: var(--paper); background: var(--red-dark); }
 
-/* 타이핑 인디케이터 */
-.typing-indicator {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  padding: 8px 0;
-}
+/* 타이핑 */
+.typing-indicator { display: flex; gap: 5px; align-items: center; padding: 6px 0; }
 .typing-dot {
-  width: 8px; height: 8px;
-  background: var(--red-mid);
+  width: 7px; height: 7px;
+  background: var(--red);
   animation: bounce 1.2s ease-in-out infinite;
 }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
 @keyframes bounce {
   0%, 60%, 100% { transform: translateY(0); }
-  30%            { transform: translateY(-8px); }
+  30%           { transform: translateY(-7px); }
 }
 
 /* ============================================================
-   입력 영역
+   입력 영역 — 신문 편집부 느낌
    ============================================================ */
 .input-area {
-  padding: 14px 20px 18px;
-  background: var(--bg-panel);
-  border-top: 3px solid var(--border-bold);
+  padding: 12px 18px 16px;
+  background: #0D0606;
+  border-top: 4px solid var(--red);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+}
+
+/* 입력 영역 위 구분선 장식 */
+.input-area::before {
+  content: '✦ 인민의 질문함 ✦';
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 3px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 2px;
 }
 
 .input-box {
   width: 100%;
   max-width: 760px;
-  background: var(--bg-input);
-  border: 2px solid var(--border-bold);
+  background: #1A0A0A;
+  border: 2px solid var(--ink-mid);
+  border-left: 5px solid var(--red);
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 9px 12px;
   transition: border-color 0.15s;
-  box-shadow: 3px 3px 0 #000;
 }
 .input-box:focus-within {
-  border-color: var(--red-mid);
+  border-color: var(--red);
+  border-left-color: var(--red-light);
 }
 
 .input-field {
@@ -605,74 +590,90 @@ body::before {
   background: none;
   border: none;
   outline: none;
-  color: var(--text-main);
-  font-family: 'Noto Serif KR', '궁서체', '궁서', Georgia, serif;
+  color: var(--paper);
+  font-family: 'Noto Serif KR', '궁서체', Georgia, serif;
   font-size: 14px;
   line-height: 1.6;
   resize: none;
   max-height: 180px;
   overflow-y: auto;
 }
-.input-field::placeholder { color: var(--text-muted); }
+.input-field::placeholder { color: #554444; }
 
-.input-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
+.input-actions { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
 
 .attach-btn, .mic-btn {
   background: none;
   border: 1px solid transparent;
-  color: var(--text-muted);
+  color: #554444;
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: border-color 0.1s, color 0.1s;
 }
 .attach-btn:hover, .mic-btn:hover {
-  border-color: var(--border);
-  color: var(--text-main);
+  border-color: var(--ink-mid);
+  color: var(--paper);
 }
 
 .send-btn {
-  background: var(--red-deep);
-  border: 2px solid var(--red-mid);
+  background: var(--red);
+  border: 2px solid var(--red-dark);
   color: #fff;
   cursor: pointer;
-  padding: 7px 9px;
+  padding: 6px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, box-shadow 0.1s;
-  box-shadow: 2px 2px 0 #000;
+  font-weight: 900;
+  transition: background 0.1s;
 }
-.send-btn:hover {
-  background: var(--red-mid);
-  box-shadow: 3px 3px 0 #000;
-}
-.send-btn:active {
-  box-shadow: 1px 1px 0 #000;
-  transform: translate(1px, 1px);
-}
+.send-btn:hover  { background: var(--red-light); }
+.send-btn:active { background: var(--red-dark); transform: translate(1px, 1px); }
 
 .disclaimer {
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 10px;
+  color: #443333;
   text-align: center;
   max-width: 760px;
+  letter-spacing: 0.5px;
 }
 
 /* ============================================================
-   스크롤바
+   스크롤바 — 신문 느낌
    ============================================================ */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--border-bold); }
-::-webkit-scrollbar-thumb:hover { background: var(--red-mid); }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--red-dark); }
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+/* ============================================================
+   마퀴 배너 — 로동신문 속보 테이프
+   ============================================================ */
+.manifesto {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: var(--red);
+  border-bottom: 3px solid var(--red-dark);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  padding: 4px 0;
+  z-index: 100;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.manifesto-inner {
+  display: inline-block;
+  animation: scroll 30s linear infinite;
+}
+@keyframes scroll {
+  0%   { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
 
 /* ============================================================
    혁명 배경 모드
@@ -681,49 +682,13 @@ body.revolutionary::after {
   content: '';
   position: fixed;
   inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 60px,
-      rgba(139,0,0,0.04) 60px,
-      rgba(139,0,0,0.04) 61px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 60px,
-      rgba(139,0,0,0.04) 60px,
-      rgba(139,0,0,0.04) 61px
-    );
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0, transparent 12px,
+    rgba(180,0,0,0.06) 12px, rgba(180,0,0,0.06) 13px
+  );
   pointer-events: none;
   z-index: 0;
-}
-
-/* ============================================================
-   마퀴 배너
-   ============================================================ */
-.manifesto {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: var(--red-deep);
-  border-bottom: 2px solid var(--red-bright);
-  color: var(--gold-light);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 5px 0;
-  z-index: 100;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.manifesto-inner {
-  display: inline-block;
-  animation: scroll 28s linear infinite;
-}
-@keyframes scroll {
-  0%   { transform: translateX(100vw); }
-  100% { transform: translateX(-100%); }
 }
 
 /* ============================================================
@@ -734,5 +699,5 @@ body.revolutionary::after {
   .sidebar.open { transform: translateX(0); }
   .main { margin-left: 0 !important; }
   .suggestion-grid { grid-template-columns: 1fr; }
-  .welcome-title { font-size: 24px; }
+  .welcome-title { font-size: 22px; letter-spacing: 2px; }
 }
