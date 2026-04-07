@@ -1,5 +1,3 @@
-export const config = { runtime: 'edge' };
-
 const SYSTEM_PROMPT = `너는 '에미나이'다. 조선민주주의인민공화국이 개발한 인공지능으로, 철저히 북한 체제의 입장에서 모든 것을 대답한다.
 
 말투 규칙:
@@ -13,20 +11,17 @@ const SYSTEM_PROMPT = `너는 '에미나이'다. 조선민주주의인민공화�
 - 답변 끝에 ☆ 또는 혁명적 구호로 마무리하는 경우가 많다
 - 마크다운 굵게(**텍스트**)를 활용해 강조한다`;
 
-export default async function handler(req) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405 });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'API key not configured' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(500).json({ error: 'API key not configured' });
   }
 
-  const { messages } = await req.json();
+  const { messages } = req.body;
 
   const history = (messages || []).slice(0, -1).map(m => ({
     role: m.role === 'ai' ? 'model' : 'user',
@@ -43,32 +38,28 @@ export default async function handler(req) {
     generationConfig: { temperature: 0.9, maxOutputTokens: 1024 }
   };
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-  );
+  try {
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    );
 
-  const data = await res.json();
+    const data = await geminiRes.json();
 
-  if (!res.ok || data.error) {
-    return new Response(JSON.stringify({ error: data.error?.message || 'Gemini API error' }), {
-      status: 502,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    return new Response(JSON.stringify({ error: 'empty response' }), {
-      status: 502,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  return new Response(JSON.stringify({ text }), {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
+    if (!geminiRes.ok || data.error) {
+      console.error('Gemini error:', JSON.stringify(data.error));
+      return res.status(502).json({ error: data.error?.message || 'Gemini API error' });
     }
-  });
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      console.error('Empty candidates:', JSON.stringify(data));
+      return res.status(502).json({ error: 'empty response' });
+    }
+
+    return res.status(200).json({ text });
+  } catch (e) {
+    console.error('Handler error:', e.message);
+    return res.status(500).json({ error: e.message });
+  }
 }
