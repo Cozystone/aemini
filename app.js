@@ -275,7 +275,8 @@ function renderChatHistory() {
     const exSec = document.createElement('div');
     exSec.id = 'exampleSection';
     exSec.innerHTML = `<div class="sidebar-section-label">혁명적 예시 대화</div><ul class="chat-history" id="exampleList"></ul>`;
-    ul.parentNode.appendChild(exSec);
+    const sidebarBottom = document.querySelector('.sidebar-bottom');
+    sidebarBottom.parentNode.insertBefore(exSec, sidebarBottom);
     const exList = exSec.querySelector('#exampleList');
     EXAMPLE_CHATS.forEach(ec => {
       const li = document.createElement('li');
