@@ -6,42 +6,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap');
 
 /* ── 북한 WK 폰트 (fonts/ 폴더에 파일 배치 필요) ── */
-@font-face {
-  font-family: 'WK궁체';
-  src: url('fonts/WK궁체.ttf') format('truetype'),
-       url('fonts/WK궁체.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'WK붓글';
-  src: url('fonts/WK붓글.ttf') format('truetype'),
-       url('fonts/WK붓글.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'WK예붓글';
-  src: url('fonts/WK예붓글.ttf') format('truetype'),
-       url('fonts/WK예붓글.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'WKW예서';
-  src: url('fonts/WKW예서.ttf') format('truetype'),
-       url('fonts/WKW예서.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'WK문화';
-  src: url('fonts/WK문화.ttf') format('truetype'),
-       url('fonts/WK문화.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'WK고직';
-  src: url('fonts/WK고직.ttf') format('truetype'),
-       url('fonts/WK고직.otf') format('opentype');
-  font-weight: normal;
-}
+@font-face { font-family: 'WK궁체';   src: url('fonts/nkfonts/WKGungche.ttf')      format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WK붓글';   src: url('fonts/nkfonts/WKBusgul.ttf')       format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WK예붓글'; src: url('fonts/nkfonts/WKYeBusgul.ttf')     format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WKW예서';  src: url('fonts/nkfonts/WKWYeseo.ttf')       format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WK문화';   src: url('fonts/nkfonts/WKMunhwa.ttf')       format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WK고직';   src: url('fonts/nkfonts/WKGojik.ttf')        format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WKW고직';  src: url('fonts/nkfonts/WKWGojik.ttf')       format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WK새날';   src: url('fonts/nkfonts/WKSaenal.ttf')       format('truetype'); font-weight: normal; }
+@font-face { font-family: 'WKW광명';  src: url('fonts/nkfonts/WKWGwangmyeong.ttf') format('truetype'); font-weight: normal; }
 
 :root {
   /* 북한 국기 색상 */
