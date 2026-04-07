@@ -51,20 +51,79 @@ window.addEventListener('DOMContentLoaded', () => {
   </span>`;
   document.body.prepend(banner);
 
-  // 배너 높이만큼 메인 아래로
-  document.querySelector('.sidebar').style.marginTop = '30px';
-  document.querySelector('.main').style.marginTop = '30px';
+  // 배너 높이만큼 아래로
+  const bannerH = banner.offsetHeight || 30;
+  document.getElementById('sidebar').style.marginTop = bannerH + 'px';
+  document.getElementById('mainArea').style.marginTop = bannerH + 'px';
 });
 
 // 사이드바 토글
 function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  sidebar.style.display = sidebar.style.display === 'none' ? 'flex' : 'none';
+  const sidebar = document.getElementById('sidebar');
+  const main = document.getElementById('mainArea');
+  const overlay = document.getElementById('sidebarOverlay');
+  const menuBtn = document.querySelector('.menu-btn');
+  const isMobile = window.innerWidth <= 700;
+
+  if (isMobile) {
+    // 모바일: 오버레이 + 슬라이드
+    const isOpen = sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', !isOpen);
+    overlay.classList.toggle('visible', !isOpen);
+    menuBtn.classList.toggle('open', !isOpen);
+  } else {
+    // 데스크탑: 사이드바 밀기
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    sidebar.classList.toggle('collapsed', !isCollapsed);
+    main.classList.toggle('expanded', !isCollapsed);
+    menuBtn.classList.toggle('open', !isCollapsed);
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const menuBtn = document.querySelector('.menu-btn');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('visible');
+  menuBtn.classList.remove('open');
 }
 
 // 배경 전환
 function toggleBg() {
   document.body.classList.toggle('revolutionary');
+}
+
+// 채팅 삭제
+function deleteChat(e, btn) {
+  e.stopPropagation();
+  const item = btn.closest('.chat-item');
+  item.style.transition = 'opacity 0.2s, transform 0.2s';
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(-10px)';
+  setTimeout(() => item.remove(), 200);
+}
+
+// 히스토리 검색 필터
+function filterHistory(query) {
+  const items = document.querySelectorAll('#chatHistory .chat-item');
+  const q = query.trim().toLowerCase();
+  let visible = 0;
+  items.forEach(item => {
+    const title = item.dataset.title?.toLowerCase() || '';
+    const match = !q || title.includes(q);
+    item.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+  let noRes = document.getElementById('noResults');
+  if (!noRes) {
+    noRes = document.createElement('li');
+    noRes.id = 'noResults';
+    noRes.className = 'no-results';
+    noRes.textContent = '검색 결과 없음, 동무';
+    document.getElementById('chatHistory').appendChild(noRes);
+  }
+  noRes.style.display = (visible === 0 && q) ? 'block' : 'none';
 }
 
 // 새 채팅

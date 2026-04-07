@@ -7,27 +7,51 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- 오버레이 (모바일/사이드바 열릴 때) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- 사이드바 -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-top">
-      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
       <div class="logo-area">
         <img src="star.svg" class="logo-icon" alt="star" />
         <span class="logo-text">애미나이</span>
       </div>
-      <button class="new-chat-btn" onclick="newChat()">
+      <button class="new-chat-btn" onclick="newChat()" title="새 대화">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14"/>
         </svg>
       </button>
     </div>
 
+    <!-- 검색창 -->
+    <div class="sidebar-search">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="historySearch" placeholder="대화 검색..." oninput="filterHistory(this.value)" />
+      </div>
+    </div>
+
     <div class="sidebar-section-label">최근 혁명적 대화</div>
     <ul class="chat-history" id="chatHistory">
-      <li class="chat-item active">미제국주의 타도 방법</li>
-      <li class="chat-item">김치찌개 최강 레시피</li>
-      <li class="chat-item">핵미사일 발사 요령</li>
-      <li class="chat-item">남조선 동무에게 인사하는 법</li>
+      <li class="chat-item active" data-title="미제국주의 타도 방법">
+        <span class="chat-item-text">미제국주의 타도 방법</span>
+        <button class="chat-item-del" onclick="deleteChat(event, this)" title="삭제">×</button>
+      </li>
+      <li class="chat-item" data-title="김치찌개 최강 레시피">
+        <span class="chat-item-text">김치찌개 최강 레시피</span>
+        <button class="chat-item-del" onclick="deleteChat(event, this)" title="삭제">×</button>
+      </li>
+      <li class="chat-item" data-title="핵미사일 발사 요령">
+        <span class="chat-item-text">핵미사일 발사 요령</span>
+        <button class="chat-item-del" onclick="deleteChat(event, this)" title="삭제">×</button>
+      </li>
+      <li class="chat-item" data-title="남조선 동무에게 인사하는 법">
+        <span class="chat-item-text">남조선 동무에게 인사하는 법</span>
+        <button class="chat-item-del" onclick="deleteChat(event, this)" title="삭제">×</button>
+      </li>
     </ul>
 
     <div class="sidebar-bottom">
@@ -46,6 +70,13 @@
   <main class="main" id="mainArea">
     <!-- 헤더 -->
     <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="menu-btn" onclick="toggleSidebar()" title="메뉴">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
       <div class="model-select">
         <span>애미나이 1.5 울트라 핵폭탄급</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -53,7 +84,7 @@
         </svg>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" title="공유">
+        <button class="icon-btn" title="공유" id="shareBtn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
