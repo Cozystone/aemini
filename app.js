@@ -267,32 +267,9 @@ function renderChatHistory() {
   if (!ul) return;
   const chats = getChats();
 
-  // 예시 대화 섹션
-  let exHtml = '';
-  if (document.getElementById('exampleSection')) {
-    // 이미 있으면 스킵
-  } else {
-    const exSec = document.createElement('div');
-    exSec.id = 'exampleSection';
-    exSec.innerHTML = `<div class="sidebar-section-label">혁명적 예시 대화</div><ul class="chat-history" id="exampleList"></ul>`;
-    const sidebarBottom = document.querySelector('.sidebar-bottom');
-    sidebarBottom.parentNode.insertBefore(exSec, sidebarBottom);
-    const exList = exSec.querySelector('#exampleList');
-    EXAMPLE_CHATS.forEach(ec => {
-      const li = document.createElement('li');
-      li.className = 'chat-item example-item';
-      li.dataset.id = ec.id;
-      li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${ec.title}</span>`;
-      li.addEventListener('click', () => loadExampleChat(ec.id));
-      exList.appendChild(li);
-    });
-  }
-
   ul.innerHTML = '';
-  if (chats.length === 0) {
-    ul.innerHTML = '';
-    return;
-  }
+
+  // 유저 대화
   chats.forEach(chat => {
     const li = document.createElement('li');
     li.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
@@ -301,6 +278,22 @@ function renderChatHistory() {
     li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${escapeHtml(chat.title)}</span>
       <button class="chat-item-del" title="삭제" onclick="deleteChatById(event,'${chat.id}')">×</button>`;
     li.addEventListener('click', (e) => { if (!e.target.classList.contains('chat-item-del')) loadChat(chat.id); });
+    ul.appendChild(li);
+  });
+
+  // 예시 대화 (구분선 후 하단에)
+  if (chats.length > 0) {
+    const divider = document.createElement('li');
+    divider.className = 'chat-history-divider';
+    divider.textContent = '예시 대화';
+    ul.appendChild(divider);
+  }
+  EXAMPLE_CHATS.forEach(ec => {
+    const li = document.createElement('li');
+    li.className = 'chat-item example-item' + (currentChatId === null && document.querySelector(`#chatHistory .example-item.active`)?.dataset.id === ec.id ? ' active' : '');
+    li.dataset.id = ec.id;
+    li.innerHTML = `<span class="chat-item-icon">★</span><span class="chat-item-text">${ec.title}</span>`;
+    li.addEventListener('click', () => loadExampleChat(ec.id));
     ul.appendChild(li);
   });
 }
