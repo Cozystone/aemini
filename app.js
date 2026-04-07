@@ -706,16 +706,25 @@ async function sendMessage() {
 // 응답 생성
 // ============================================================
 async function generateResponse(text) {
-  const messages = currentMessages.slice(-10);
-  const res = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages })
-  });
-  if (!res.ok) throw new Error(`API ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-  return data.text;
+  try {
+    const messages = currentMessages.slice(-10);
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages })
+    });
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.text;
+  } catch {
+    // 폴백: 규칙 기반
+    const t = text.toLowerCase();
+    for (const rule of RULES) {
+      if (rule.test(t)) return pick(rule.responses);
+    }
+    return pick(RULES[RULES.length - 1].responses);
+  }
 }
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
