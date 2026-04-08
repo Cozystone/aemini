@@ -1,48 +1,41 @@
-// Vercel KV REST API 래퍼 (패키지 없이 직접 호출)
-// KV_REST_API_URL/TOKEN 또는 REDIS_URL(Upstash) 모두 지원
-function getConfig() {
-  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-    return { base: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN };
-  }
-  if (process.env.REDIS_URL) {
-    // rediss://default:TOKEN@HOST.upstash.io:PORT
-    try {
-      const url = new URL(process.env.REDIS_URL);
-      const base = `https://${url.hostname}`;
-      const token = url.password;
-      if (base && token) return { base, token };
-    } catch {}
-  }
-  return null;
-}
+import Redis from 'ioredis';
 
-function headers(token) {
-  return { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+let _client = null;
+
+function getClient() {
+  if (!process.env.REDIS_URL) return null;
+  if (!_client) {
+    _client = new Redis(process.env.REDIS_URL, {
+      maxRetriesPerRequest: 1,
+      enableReadyCheck: false,
+      lazyConnect: false,
+    });
+    _client.on('error', () => {});
+  }
+  return _client;
 }
 
 export async function kvGet(key) {
-  const cfg = getConfig();
-  if (!cfg) return null;
-  const res = await fetch(`${cfg.base}/get/${encodeURIComponent(key)}`, { headers: headers(cfg.token) });
-  const data = await res.json();
-  if (!data.result) return null;
-  try { return JSON.parse(data.result); } catch { return data.result; }
+  const client = getClient();
+  if (!client) return null;
+  try {
+    const val = await client.get(key);
+    if (val === null) return null;
+    try { return JSON.parse(val); } catch { return val; }
+  } catch { return null; }
 }
 
 export async function kvSet(key, value, exSeconds) {
-  const cfg = getConfig();
-  if (!cfg) throw new Error('KV not configured');
-  const cmd = exSeconds
-    ? ['set', key, JSON.stringify(value), 'ex', exSeconds]
-    : ['set', key, JSON.stringify(value)];
-  const res = await fetch(`${cfg.base}/pipeline`, {
-    method: 'POST',
-    headers: headers(cfg.token),
-    body: JSON.stringify([cmd])
-  });
-  return res.ok;
+  const client = getClient();
+  if (!client) throw new Error('KV not configured');
+  const str = JSON.stringify(value);
+  if (exSeconds) {
+    await client.set(key, str, 'EX', exSeconds);
+  } else {
+    await client.set(key, str);
+  }
 }
 
 export function kvReady() {
-  return !!getConfig();
+  return !!process.env.REDIS_URL;
 }
