@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     existing = await kvGet(`user:${username}`);
   } catch {
-    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. Upstash Redis 설정을 확인하시오.' });
+    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. REDIS_URL 설정을 확인하시오.' });
   }
   if (existing) return res.status(409).json({ error: '이미 등록된 동무이오' });
 
@@ -30,6 +30,6 @@ export default async function handler(req, res) {
     await kvSet(`session:${token}`, { userId, username }, 60 * 60 * 24 * 30);
     res.status(200).json({ token, username });
   } catch {
-    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. Upstash Redis 설정을 확인하시오.' });
+    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. REDIS_URL 설정을 확인하시오.' });
   }
 }
