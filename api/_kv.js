@@ -5,9 +5,15 @@ let _clientPromise = null;
 function getClient() {
   if (!process.env.REDIS_URL) return null;
   if (!_clientPromise) {
-    const client = createClient({ url: process.env.REDIS_URL });
-    client.on('error', () => {});
-    _clientPromise = client.connect().then(() => client);
+    const client = createClient({
+      url: process.env.REDIS_URL,
+      socket: {
+        connectTimeout: 5000,
+        reconnectStrategy: false,
+      },
+    });
+    client.on('error', () => { _clientPromise = null; });
+    _clientPromise = client.connect().then(() => client).catch(() => { _clientPromise = null; return null; });
   }
   return _clientPromise;
 }
