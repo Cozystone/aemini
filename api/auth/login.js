@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   try {
     user = await kvGet(`user:${username}`);
   } catch {
-    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. REDIS_URL 설정을 확인하시오.' });
+    return res.status(503).json({ error: '데이터베이스 연결에 실패하였소. 잠시 후 다시 시도하시오.' });
   }
   if (!user) return res.status(401).json({ error: '등록되지 않은 동무이오' });
   if (hashPw(password, user.salt) !== user.passwordHash) return res.status(401).json({ error: '비밀번호가 틀렸소' });
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   try {
     await kvSet(`session:${token}`, { userId: user.id, username }, 60 * 60 * 24 * 30);
   } catch {
-    return res.status(503).json({ error: 'KV 데이터베이스 연결에 실패하였소. REDIS_URL 설정을 확인하시오.' });
+    return res.status(503).json({ error: '데이터베이스 연결에 실패하였소. 잠시 후 다시 시도하시오.' });
   }
 
   res.status(200).json({ token, username });

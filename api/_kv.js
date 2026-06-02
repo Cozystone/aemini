@@ -1,42 +1,43 @@
-import { createClient } from 'redis';
+import { neon } from '@neondatabase/serverless';
 
-let _clientPromise = null;
+let _sql = null;
+let _tableReady = false;
 
-function getClient() {
-  if (!process.env.REDIS_URL) return null;
-  if (!_clientPromise) {
-    const client = createClient({
-      url: process.env.REDIS_URL,
-      socket: {
-        connectTimeout: 5000,
-        reconnectStrategy: false,
-      },
-    });
-    client.on('error', () => { _clientPromise = null; });
-    _clientPromise = client.connect().then(() => client).catch(() => { _clientPromise = null; return null; });
-  }
-  return _clientPromise;
+function getSql() {
+  if (!process.env.DATABASE_URL) return null;
+  if (!_sql) _sql = neon(process.env.DATABASE_URL);
+  return _sql;
+}
+
+async function ensureTable(sql) {
+  if (_tableReady) return;
+  await sql`CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT, expires_at BIGINT)`;
+  _tableReady = true;
 }
 
 export async function kvGet(key) {
-  const client = await getClient();
-  if (!client) return null;
-  const val = await client.get(key);
-  if (val === null) return null;
-  try { return JSON.parse(val); } catch { return val; }
+  const sql = getSql();
+  if (!sql) return null;
+  await ensureTable(sql);
+  const rows = await sql`SELECT value, expires_at FROM kv WHERE key = ${key}`;
+  if (!rows.length) return null;
+  const { value, expires_at } = rows[0];
+  if (expires_at && expires_at < Date.now()) return null;
+  try { return JSON.parse(value); } catch { return value; }
 }
 
 export async function kvSet(key, value, exSeconds) {
-  const client = await getClient();
-  if (!client) throw new Error('KV not configured');
+  const sql = getSql();
+  if (!sql) throw new Error('KV not configured');
+  await ensureTable(sql);
   const str = JSON.stringify(value);
-  if (exSeconds) {
-    await client.set(key, str, { EX: exSeconds });
-  } else {
-    await client.set(key, str);
-  }
+  const expiresAt = exSeconds ? Date.now() + exSeconds * 1000 : null;
+  await sql`
+    INSERT INTO kv (key, value, expires_at) VALUES (${key}, ${str}, ${expiresAt})
+    ON CONFLICT (key) DO UPDATE SET value = ${str}, expires_at = ${expiresAt}
+  `;
 }
 
 export function kvReady() {
-  return !!process.env.REDIS_URL;
+  return !!process.env.DATABASE_URL;
 }

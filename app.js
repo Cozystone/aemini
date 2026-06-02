@@ -231,11 +231,13 @@ let _saveTimer = null;
 // 인증
 // ============================================================
 function getToken() { return localStorage.getItem(LS_TOKEN); }
-function getUsername() { return localStorage.getItem(LS_USERNAME) || '동무'; }
+function isGuest() { return !getToken() && !!localStorage.getItem('aemini_guest'); }
+function getUsername() { return isGuest() ? '게스트 동무' : (localStorage.getItem(LS_USERNAME) || '동무'); }
 function logout() {
   localStorage.removeItem(LS_TOKEN);
   localStorage.removeItem(LS_USERNAME);
   localStorage.removeItem(LS_CHATS);
+  localStorage.removeItem('aemini_guest');
   window.location.href = '/login.html';
 }
 
@@ -253,7 +255,7 @@ function saveChats(chats) {
 }
 async function syncChatsToServer(chats) {
   const token = getToken();
-  if (!token) return;
+  if (!token || isGuest()) return;
   try {
     await fetch('/api/user-chats', {
       method: 'POST',
@@ -264,7 +266,7 @@ async function syncChatsToServer(chats) {
 }
 async function loadChatsFromServer() {
   const token = getToken();
-  if (!token) return;
+  if (!token || isGuest()) return;
   try {
     const res = await fetch('/api/user-chats', {
       headers: { 'Authorization': `Bearer ${token}` }
@@ -354,7 +356,7 @@ function deleteChatById(e, id) {
 // ============================================================
 window.addEventListener('DOMContentLoaded', async () => {
   // 인증 체크
-  if (!getToken()) {
+  if (!getToken() && !isGuest()) {
     window.location.href = '/login.html';
     return;
   }
