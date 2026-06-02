@@ -1,39 +1,29 @@
-import Redis from 'ioredis';
+import { Redis } from '@upstash/redis';
 
 let _client = null;
 
 function getClient() {
-  if (!process.env.REDIS_URL) return null;
-  if (!_client) {
-    _client = new Redis(process.env.REDIS_URL, {
-      maxRetriesPerRequest: 1,
-      enableReadyCheck: false,
-      lazyConnect: false,
-    });
-    _client.on('error', () => {});
-  }
+  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) return null;
+  if (!_client) _client = Redis.fromEnv();
   return _client;
 }
 
 export async function kvGet(key) {
   const client = getClient();
   if (!client) return null;
-  const val = await client.get(key);
-  if (val === null) return null;
-  try { return JSON.parse(val); } catch { return val; }
+  return await client.get(key);
 }
 
 export async function kvSet(key, value, exSeconds) {
   const client = getClient();
   if (!client) throw new Error('KV not configured');
-  const str = JSON.stringify(value);
   if (exSeconds) {
-    await client.set(key, str, 'EX', exSeconds);
+    await client.set(key, value, { ex: exSeconds });
   } else {
-    await client.set(key, str);
+    await client.set(key, value);
   }
 }
 
 export function kvReady() {
-  return !!process.env.REDIS_URL;
+  return !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
 }
