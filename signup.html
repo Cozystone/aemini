@@ -225,7 +225,8 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
-      const data = await res.json();
+      let data;
+      try { data = await res.json(); } catch { throw new Error('서버 오류가 발생하였소. 잠시 후 다시 시도하시오.'); }
       if (!res.ok) throw new Error(data.error);
       localStorage.setItem('aemini_token', data.token);
       localStorage.setItem('aemini_username', data.username);

@@ -18,11 +18,9 @@ function getClient() {
 export async function kvGet(key) {
   const client = getClient();
   if (!client) return null;
-  try {
-    const val = await client.get(key);
-    if (val === null) return null;
-    try { return JSON.parse(val); } catch { return val; }
-  } catch { return null; }
+  const val = await client.get(key);
+  if (val === null) return null;
+  try { return JSON.parse(val); } catch { return val; }
 }
 
 export async function kvSet(key, value, exSeconds) {
